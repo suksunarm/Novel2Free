@@ -1,0 +1,20 @@
+{
+  "name": "novel2free",
+  "version": "1.0.0",
+  "description": "เว็บไซต์อ่านนิยายยอดนิยม ติดเทรนด์อันดับ 1 ดิ่งสู่โลกแห่งจินตนาการ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
