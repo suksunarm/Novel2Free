@@ -3,18 +3,6 @@ const router = express.Router()
 const path = require('path')
 const Novel = require('../model/novel');
 
-// router.get("/add_novel", (req,res) => {
-//     res.sendFile(path.join(__dirname,"..","views","add_novel.html"));
-// })
-
-// router.get("/add_redeem", (req,res) => {
-//     res.sendFile(path.join(__dirname,"..","views","add_redeem_code.html"));
-// })
-
-// router.get("/dashboard", (req,res) => {
-//     res.sendFile(path.join(__dirname,"..","views","dashboard_admin.html"));
-// })
-
 router.get("/add_novel", (req,res) => {
     res.render('add_novel', { pageTitle: 'เพิ่มนิยาย'});
 })
