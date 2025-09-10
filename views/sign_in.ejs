@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <title>Signup</title>
+    <title><%= pageTitle %></title>
 </head>
 <body>
-    <div class="flex bg-[url('/assets/bg/bg.png')] min-h-screen bg-center bg-cover justify-center items-center">
+    <div class="flex bg-[url('/assets/bg.png')] min-h-screen bg-center bg-cover justify-center items-center">
         <div class="bg-[#5D4F71] flex flex-col w-[440px] text-black rounded-[20px] p-5 h-fit">
-            <div class="text-white font-bold text-[28px] text-center">สร้างบัญชี Novel2Free</div>
+            <div class="text-white font-bold text-[28px] text-center">เข้าสู่ระบบ</div>
             <div class="mb-3">
                 <div class="text-white text-[16px]"> 
                     อีเมล
@@ -39,11 +39,11 @@
                     type="password"
                 />
             </div>
-            <a href="/signin" class="text-white mb-5 text-[16px] underline underline-offset-4"> 
-                มีบัญชีอยู่แล้ว ?
+            <a href="/signup" class="text-white mb-5 text-[16px] underline underline-offset-4"> 
+                สมัครบัญชี
             </a>
             <button class="bg-gradient-to-r from-[#8164FF] to-[#CB52FF] text-white font-bold rounded-[10px] p-2">
-                สร้างบัญชี
+                เข้าสู่ระบบ
             </button>
         </div>
     </div>
