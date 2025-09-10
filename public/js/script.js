@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
         email,
         password,
       }
-      console.log(login)
+      
       signInFunction(login);
     });
   }
@@ -84,6 +84,50 @@ document.addEventListener("DOMContentLoaded", () => {
       localStorage.setItem("token"+data.token)
     } else {
       alert("เกิดข้อผิดพลาด ไม่สามารถเข้าสู่ระบบได้")
+    }
+   } catch (err) {
+        console.error("เกิดข้อผิดพลาด ",err)
+    }
+  };
+
+  //addNovel
+  const addNovel = document.getElementById("addNovel");
+  if (addNovel) {
+    addNovel.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const nameNovel = document.getElementById("nameNovel").value;
+      const contentNovel = document.getElementById("contentNovel").value;
+      const priceNovel = document.getElementById("priceNovel").value;
+
+      //เหลือ imgNovel
+      const novel = {
+        nameNovel,
+        contentNovel,
+        priceNovel
+      }
+      
+      addNovelFunction(novel);
+      
+    });
+  }
+
+  const addNovelFunction = async (data) => {
+   try {
+    const response = await fetch("http://localhost:3000/addNovel", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (response.ok) {
+      alert("เพิ่มนิยายเสร็จสิ้น");
+      addNovel.reset();
+    } else {
+        const data = await response.json()
+      alert("เกิดข้อผิดพลาด ไม่สามารถเพิ่มนิยายได้ error : "+data.msg)
     }
    } catch (err) {
         console.error("เกิดข้อผิดพลาด ",err)
