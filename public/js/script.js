@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  //form
+  //Signup
   const formSignup = document.getElementById("Signup");
   if (formSignup) {
     formSignup.addEventListener("submit", (e) => {
@@ -27,6 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  //Signin
   const formSignin = document.getElementById("Signin");
   if (formSignin) {
     formSignin.addEventListener("submit", (e) => {
@@ -44,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  //function post url
+  //function Signup
   const signUpFunction = async (data) => {
    try {
     const response = await fetch("http://localhost:3000/create_user", {
@@ -67,6 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  //function Signin
   const signInFunction = async (data) => {
    try {
     const response = await fetch("http://localhost:3000/login_user", {
@@ -81,7 +83,8 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("เข้าสู่ระบบเสร็จสิ้น");
       formSignin.reset();
       const data = await response.json()
-      localStorage.setItem("token"+data.token)
+      localStorage.setItem("token", data.token);
+      window.location.href = "/";
     } else {
       alert("เกิดข้อผิดพลาด ไม่สามารถเข้าสู่ระบบได้")
     }
@@ -89,5 +92,32 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error("เกิดข้อผิดพลาด ",err)
     }
   };
+
+  // LOGOUT & Check Token
+  const token = localStorage.getItem('token');
+  const signinBtn = document.getElementById('signinBtn');
+  const userIcon = document.getElementById('userIcon');
+  const logoutBtn = document.getElementById('logout');
+
+  if (token) {
+      // If a token exists, show the user icon and hide the sign-in button
+      signinBtn.classList.add('hidden');
+      userIcon.classList.remove('hidden');
+  } else {
+      // If no token, show the sign-in button and hide the user icon
+      signinBtn.classList.remove('hidden');
+      userIcon.classList.add('hidden');
+  }
+
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+      localStorage.removeItem('token');
+      signinBtn.classList.remove('hidden');
+      userIcon.classList.add('hidden');
+      // รีเฟรชหน้า หรือ redirect ไปหน้า login ถ้าต้องการ
+      // location.reload();
+    });
+  }
+
 
 });

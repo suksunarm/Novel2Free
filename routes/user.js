@@ -5,22 +5,6 @@ const bcrypt = require('bcrypt');
 const User = require('../model/user')
 const jwt = require("jsonwebtoken")
 
-// router.get("/", (req,res) => {
-//     res.sendFile(path.join(__dirname,"..","views","home_page.html"));
-// })
-
-// router.get("/cart", (req,res) => {
-//     res.sendFile(path.join(__dirname,"..","views","cart.html"));
-// })
-
-// router.get("/point", (req,res) => {
-//     res.sendFile(path.join(__dirname,"..","views","point.html"));
-// })
-
-// router.get("/signup", (req,res) => {
-//     res.sendFile(path.join(__dirname,"..","views","sign_up.html"));
-// })
-
 router.get("/", (req,res) => {
     res.render('home_page', { pageTitle: 'หน้าหลัก'})
 })
