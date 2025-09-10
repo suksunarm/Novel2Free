@@ -1,7 +1,12 @@
+require("dotenv").config();
 const express = require("express");
 const path = require("path");
+const connectDB = require("./config/db");
 const app = express();
 const port = 3000;
+
+// เอาไว้เชื่อม DB
+connectDB();
 
 const adminRoutes = require('./routes/admin')
 const userRoutes = require('./routes/user')
