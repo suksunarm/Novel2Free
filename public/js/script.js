@@ -162,6 +162,33 @@ document.addEventListener("DOMContentLoaded", () => {
     editNovelFunction(novelId, novel);
   });
 
+  const deleteNovelFunction = async (novelId) => {
+    try {
+      const response = await fetch(`/admin/novel/${novelId}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        alert("ลบนิยายเสร็จสิ้น");
+        location.reload();
+      } else {
+        const data = await response.json();
+        alert("เกิดข้อผิดพลาด ไม่สามารถลบนิยายได้ error : " + data.msg);
+      }
+    } catch (err) {
+      console.error("เกิดข้อผิดพลาด ", err);
+    }
+  };
+
+  document.querySelectorAll(".delete-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      const novelId = btn.dataset.id; // กำหนด data-id ในปุ่ม delete
+      if (confirm("คุณต้องการลบนิยายนี้จริงหรือไม่?")) {
+        deleteNovelFunction(novelId);
+      }
+    });
+  });
+
   // ปิด modal
   closeEditModal.addEventListener("click", () => {
     editModal.classList.add("hidden");
