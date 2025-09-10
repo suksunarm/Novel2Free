@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         body: JSON.stringify(data),
       });
-      
+
       if (response.ok) {
         alert("เพิ่มนิยายเสร็จสิ้น");
         addNovel.reset();
@@ -76,7 +76,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const contentNovel = document.getElementById("contentNovel").value;
       const priceNovel = parseInt(document.getElementById("priceNovel").value);
       const imgNovel = document.getElementById("imageNovel").value;
-
 
       //เหลือ imgNovel
       const novel = {
@@ -128,7 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
         formSignin.reset();
         const data = await response.json();
         localStorage.setItem("token", data.token);
-        window.location.href = "/";
+        window.location.href = data.redirectPath;
       } else {
         alert("เกิดข้อผิดพลาด ไม่สามารถเข้าสู่ระบบได้");
       }
@@ -137,20 +136,33 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  const logoutFunction = () => {
+    try {
+      const response = fetch("http://localhost:3000/logout", {
+        method: "GET",
+      });
+    } catch (err) {
+      console.error("เกิดข้อผิดพลาด ไม่สามารถลบคุกกี้ได้", err);
+    }
+  };
+
+  
+
   // LOGOUT & Check Token
   const token = localStorage.getItem("token");
   const signinBtn = document.getElementById("signinBtn");
   const userIcon = document.getElementById("userIcon");
   const logoutBtn = document.getElementById("logout");
+  const logoutAdmin = document.getElementById("logoutAdmin");
 
-  if (token) {
-    // If a token exists, show the user icon and hide the sign-in button
-    signinBtn.classList.add("hidden");
-    userIcon.classList.remove("hidden");
-  } else {
-    // If no token, show the sign-in button and hide the user icon
-    signinBtn.classList.remove("hidden");
-    userIcon.classList.add("hidden");
+  if (signinBtn && userIcon) {
+    if (token) {
+      signinBtn.classList.add("hidden");
+      userIcon.classList.remove("hidden");
+    } else {
+      signinBtn.classList.remove("hidden");
+      userIcon.classList.add("hidden");
+    }
   }
 
   if (logoutBtn) {
@@ -160,8 +172,16 @@ document.addEventListener("DOMContentLoaded", () => {
       userIcon.classList.add("hidden");
       // รีเฟรชหน้า หรือ redirect ไปหน้า login ถ้าต้องการ
       // location.reload();
+      logoutFunction();
     });
   }
 
-  
+  if (logoutAdmin) {
+    logoutAdmin.addEventListener("click", () => {
+      localStorage.removeItem("token");
+      logoutFunction();
+      window.location.href = "/signin";
+      console.log("ออกจากระบบ");
+    });
+  }
 });

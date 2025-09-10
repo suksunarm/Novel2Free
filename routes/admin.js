@@ -2,16 +2,28 @@ const express = require("express");
 const router = express.Router();
 const path = require("path");
 const Novel = require("../model/novel");
+const authMiddleware = require("../auth/auth");
 
-router.get("/add_novel", (req, res) => {
+const role = "admin"
+
+router.get("/add_novel", authMiddleware, (req, res) => {
+  if (req.user.role !== role) {
+    return res.redirect("/signin");
+  }
   res.render("add_novel", { pageTitle: "เพิ่มนิยาย" });
 });
 
-router.get("/add_redeem", (req, res) => {
+router.get("/add_redeem", authMiddleware, (req, res) => {
+  if (req.user.role !== role) {
+    return res.redirect("/signin");
+  }
   res.render("add_redeem_code", { pageTitle: "เพิ่มคูปอง" });
 });
 
-router.get("/dashboard", (req, res) => {
+router.get("/dashboard", authMiddleware, (req, res) => {
+  if (req.user.role !== role) {
+    return res.redirect("/signin");
+  }
   res.render("dashboard_admin", { pageTitle: "แดชบอร์ด" });
 });
 
