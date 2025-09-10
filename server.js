@@ -8,6 +8,7 @@ const port = 3000;
 // เอาไว้เชื่อม DB
 connectDB();
 
+//Routing
 const adminRoutes = require('./routes/admin')
 const userRoutes = require('./routes/user')
 
