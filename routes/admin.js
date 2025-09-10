@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const path = require("path");
 const Novel = require("../model/novel");
+const Coupon = require("../model/coupon");
 const authMiddleware = require("../auth/auth");
 
 const role = "admin"
@@ -37,8 +38,6 @@ router.post("/addNovel", async (req, res) => {
       price: priceNovel,
     });
 
-    console.log("api เส้น add Novel");
-
     await novel.save();
     res.status(201).json({
       msg: "Add Novel Success",
@@ -53,5 +52,30 @@ router.post("/addNovel", async (req, res) => {
     res.status(500).json({ msg: "Add Novel Failed, error message:", err });
   }
 });
+
+router.post("/add-Redeem-Code", async (req, res) => {
+  try {
+    const { nameCoupon, codeCoupon, pointsCoupon } = req.body;
+    const coupon = new Coupon({
+      Name: nameCoupon,
+      code: codeCoupon,
+      points: pointsCoupon,
+    });
+
+    await coupon.save();
+    res.status(201).json({
+      msg: "Add Redeem Success",
+      coupon: {
+        Name: coupon.Name,
+        code: coupon.code,
+        points: coupon.points,
+      },
+    });
+    res.redirect('/dashboard')
+  } catch (err) {
+    res.status(500).json({ msg: "Add Coupon Failed, error message:", err });
+  }
+});
+
 
 module.exports = router;

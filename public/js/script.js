@@ -71,7 +71,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (addNovel) {
     addNovel.addEventListener("submit", (e) => {
       e.preventDefault();
-      console.log("Form submit triggered");
       const nameNovel = document.getElementById("nameNovel").value;
       const contentNovel = document.getElementById("contentNovel").value;
       const priceNovel = parseInt(document.getElementById("priceNovel").value);
@@ -85,6 +84,24 @@ document.addEventListener("DOMContentLoaded", () => {
         priceNovel,
       };
       addNovelFunction(novel);
+    });
+  }
+
+  const addRedeemCode = document.getElementById("addRedeemCode");
+  if (addRedeemCode) {
+    addRedeemCode.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const nameCoupon = document.getElementById("nameCoupon").value;
+      const codeCoupon = document.getElementById("codeCoupon").value;
+      const pointsCoupon = parseInt(document.getElementById("pointsCoupon").value);
+
+      //เหลือ imgNovel
+      const redeemCode = {
+        nameCoupon,
+        codeCoupon,
+        pointsCoupon,
+      };
+      addRedeemCodeFunction(redeemCode);
     });
   }
 
@@ -146,7 +163,30 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  
+  //function Add Coupon
+  const addRedeemCodeFunction = async (data) => {
+    try {
+      const response = await fetch("http://localhost:3000/admin/add-Redeem-Code", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        alert("เพิ่มคูปองสำเร็จ!");
+        addRedeemCode.reset();
+        const data = await response.json();
+        console.log(data.copon)
+      } else {
+        const data = await response.json();
+        alert("เกิดข้อผิดพลาด ไม่สามารถเพิ่ม Coupon ได้: " + data.msg);
+      }
+    } catch (err) {
+      console.error("เกิดข้อผิดพลาด ", err);
+    }
+  };
 
   // LOGOUT & Check Token
   const token = localStorage.getItem("token");
