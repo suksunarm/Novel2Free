@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= pageTitle %></title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="flex flex-col bg-[url('/assets/bg.png')] min-h-screen bg-center bg-cover">
+    <!-- Wrapper -->
+    <div class="max-w-5xl mx-auto p-6">
+      <!-- Novel Header -->
+      <div class="bg-purple-800/30 backdrop-blur-md p-6 rounded-2xl shadow-lg flex gap-6">
+        <!-- Novel Cover -->
+        <img src="/assets/bg.png" alt="Novel Cover"
+             class="w-40 h-56 object-cover rounded-xl shadow-md border border-purple-700">
+        <!-- Novel Info -->
+        <div class="flex flex-col justify-between">
+          <div>
+            <h1 class="text-3xl font-bold text-purple-300">ชื่อเรื่อง</h1>
+            <p class="text-lg text-gray-300 mt-2">ราคา: <span class="text-purple-400 font-semibold">ราคา บาท</span></p>
+          </div>
+          <button class="mt-4 bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-xl font-semibold transition">
+            เพิ่มเข้าตะกร้า
+          </button>
+        </div>
+      </div>
+
+      <!-- Novel Content -->
+      <div class="mt-8 bg-gray-900/70 backdrop-blur-sm p-6 rounded-2xl shadow-lg leading-relaxed text-gray-200">
+        <h2 class="text-2xl font-semibold text-purple-400 mb-4">เนื้อหา</h2>
+        <p class="whitespace-pre-line">รายละเอียดเนื้อหา</p>
+      </div>
+    </div>
+  </body>
+</html>

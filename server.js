@@ -6,7 +6,8 @@ const port = 3000;
 const adminRoutes = require('./routes/admin')
 const userRoutes = require('./routes/user')
 
-app.set("views" , "views");
+app.set('view engine','ejs');
+app.set('views',path.join(__dirname,'views'));
 
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.urlencoded({extended: true}))
@@ -16,11 +17,11 @@ app.use('/',userRoutes)
 app.use('/admin',adminRoutes)
 
 app.get("/signin", (req,res) => {
-    res.sendFile(path.join(__dirname, "views", "sign_in.html"))
+    res.render('sign_in', { pageTitle: 'เข้าสู่ระบบ'})
 });
 
 app.use((req,res) => {
-    res.status(404).sendFile(path.join(__dirname, "views", "404.html"))
+    res.status(404).render('404', { pageTitle: '404'})
 });
 
 app.listen(port, () => {
