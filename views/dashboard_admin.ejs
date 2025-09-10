@@ -8,7 +8,7 @@
   </head>
   <body>
     <div
-      class="bg-[url('/assets/bg.png')] bg-cover bg-center min-h-screen w-full grid grid-cols-[20%_80%]"
+      class="bg-[url('/assets/bg.png')] bg-cover bg-center min-h-screen w-full grid grid-cols-[20%_75%]"
     >
       <div>
         <nav
@@ -107,29 +107,90 @@
           Welcome, Admin!
         </h1>
         <p class="mt-4 text-gray-200">This is your dashboard.</p>
-        <div>
-          <div
-            class="mt-5 p-5 grid grid-cols-[80%_20%] text-lg rounded-xl w-full bg-sky-200"
-          >
-            <div class="grid grid-rows-3">
-              <div>
-                <span class="font-bold">Name: </span>เรื่องเล่าวิทย์คอม KUKPS
+
+        <% novels.forEach(novel => { %>
+        <div
+          class="mt-5 p-5 grid grid-cols-[80%_20%] text-lg rounded-xl w-full bg-sky-200"
+        >
+          <div class="grid grid-rows-3">
+            <div><span class="font-bold">Name: </span><%= novel.title %></div>
+            <div class="flex gap-1">
+              <div class="font-bold">Content:</div>
+              <div class="truncate block max-w-[300px] align-middle">
+                <%= novel.content %>
               </div>
-              <div>
-                <span class="font-bold">Content: </span>มีอยู่วันหนึ่ง
-                วันแห่งการสอบ Propo...
-              </div>
-              <div><span class="font-bold">Price: </span>16588 Points</div>
             </div>
-            <div class="flex gap-4 place-content-center items-center">
-              <button class="w-20 h-10 rounded-lg bg-yellow-500">Edit</button>
-              <button class="w-20 h-10 rounded-lg bg-rose-700 text-white">
-                Delete
-              </button>
+            <div>
+              <span class="font-bold">Price: </span><%= novel.price %> Points
             </div>
           </div>
+          <div class="flex gap-4 place-content-center items-center">
+            <button
+              class="w-20 h-10 rounded-lg bg-yellow-500 edit-btn"
+              data-id="<%= novel._id %>"
+            >
+              Edit
+            </button>
+            <button class="w-20 h-10 rounded-lg bg-rose-700 text-white">
+              Delete
+            </button>
+          </div>
         </div>
+        <% }) %>
+      </div>
+
+      <div
+        id="editModal"
+        class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-20 hidden"
+      >
+        <form
+          id="editNovelForm"
+          class="p-6 grid bg-[#5D4F71] rounded-xl gap-y-2 w-full h-full"
+        >
+          <h1 class="text-center text-4xl font-extrabold mb-3 text-white">
+            Edit Novel
+          </h1>
+          <input
+            id="editName"
+            type="text"
+            required
+            class="px-4 py-2 mt-2 rounded-lg w-full"
+          />
+          <textarea
+            id="editContent"
+            required
+            class="resize-none h-28 px-4 py-2 mt-2 rounded-lg w-full"
+          ></textarea>
+          <input
+            id="editPrice"
+            type="number"
+            required
+            class="px-4 py-2 mt-2 rounded-lg w-full"
+          />
+          <input
+            id="editImage"
+            type="text"
+            required
+            class="w-full px-4 py-2 rounded-lg text-black text-sm"
+          />
+          <div class="flex gap-2 mt-4">
+            <button
+              type="submit"
+              class="bg-yellow-500 text-white font-bold rounded-[10px] p-2 w-full"
+            >
+              Save
+            </button>
+            <button
+              type="button"
+              id="closeEditModal"
+              class="bg-gray-400 text-white font-bold rounded-[10px] p-2 w-full"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
       </div>
     </div>
+    <script src="/js/script.js"></script>
   </body>
 </html>
