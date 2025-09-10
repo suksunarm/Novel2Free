@@ -1,7 +1,11 @@
 const express = require("express");
 const mongoose = require("mongoose");
-
 const app = express();
+
+//Model Schema
+const Coupon = require("../model/coupon");
+const User = require("../model/user");
+const Novel = require("../model/novel");
 
 const mongoDBUri = process.env.MONGO_URI;
 
