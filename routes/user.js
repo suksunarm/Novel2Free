@@ -3,6 +3,7 @@ const router = express.Router()
 const path = require('path')
 const bcrypt = require('bcrypt');
 const User = require('../model/user')
+const jwt = require("jsonwebtoken")
 
 // router.get("/", (req,res) => {
 //     res.sendFile(path.join(__dirname,"..","views","home_page.html"));
@@ -41,7 +42,7 @@ router.post("/create_user" , async (req, res) => {
         const { email , password , role } = req.body 
         const checkEmail = await User.findOne({email});
         if(checkEmail) {
-            res.status(400).json({msg:'this email is available'}) // check อีเมลซ้ำ
+            return res.status(400).json({msg:'this email is available'}) // check อีเมลซ้ำ
         }
 
         const hashPassword = await bcrypt.hash(password,10)

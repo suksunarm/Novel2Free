@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="flex bg-[url('/assets/bg.png')] min-h-screen bg-center bg-cover justify-center items-center">
-        <div class="bg-[#5D4F71] flex flex-col w-[440px] text-black rounded-[20px] p-5 h-fit">
+        <form id="Signin" class="bg-[#5D4F71] flex flex-col w-[440px] text-black rounded-[20px] p-5 h-fit">
             <div class="text-white font-bold text-[28px] text-center">เข้าสู่ระบบ</div>
             <div class="mb-3">
                 <div class="text-white text-[16px]"> 
@@ -17,6 +17,9 @@
                 <input
                     class="bg-white rounded-[16px] w-full p-2 pl-4"
                     placeholder="อีเมล"
+                    type="email"
+                    id="emailLogin"
+                    required
                 />
             </div>
             <div class="mb-3">
@@ -27,25 +30,18 @@
                     class="bg-white rounded-[16px] w-full p-2 pl-4"
                     placeholder="รหัสผ่าน"
                     type="password"
-                />
-            </div>
-            <div class="mb-3">
-                <div class="text-white text-[16px]"> 
-                    ยืนยันรหัสผ่าน
-                </div>
-                <input
-                    class="bg-white rounded-[16px] w-full p-2 pl-4"
-                    placeholder="ยืนยันรหัสผ่าน"
-                    type="password"
+                    id="passwordLogin"
+                    required
                 />
             </div>
             <a href="/signup" class="text-white mb-5 text-[16px] underline underline-offset-4"> 
                 สมัครบัญชี
             </a>
-            <button class="bg-gradient-to-r from-[#8164FF] to-[#CB52FF] text-white font-bold rounded-[10px] p-2">
+            <button type="submit" class="bg-gradient-to-r from-[#8164FF] to-[#CB52FF] text-white font-bold rounded-[10px] p-2">
                 เข้าสู่ระบบ
             </button>
-        </div>
+        </form>
     </div>
+    <script src='/js/script.js'></script>
 </body>
 </html>

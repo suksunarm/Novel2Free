@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
   //form
-  const form = document.getElementById("Signup");
-  if (form) {
-    form.addEventListener("submit", (e) => {
+  const formSignup = document.getElementById("Signup");
+  if (formSignup) {
+    formSignup.addEventListener("submit", (e) => {
       e.preventDefault();
 
       const email = document.getElementById("email").value;
@@ -27,6 +27,23 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  const formSignin = document.getElementById("Signin");
+  if (formSignin) {
+    formSignin.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById("emailLogin").value;
+      const password = document.getElementById("passwordLogin").value;
+    
+      const login = {
+        email,
+        password,
+      }
+      console.log(login)
+      signInFunction(login);
+    });
+  }
+
   //function post url
   const signUpFunction = async (data) => {
    try {
@@ -40,13 +57,37 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (response.ok) {
       alert("สมัครสมาชิกเสร็จสิ้น");
-      form.reset();
+      formSignup.reset();
     } else {
         const data = await response.json()
-      alert("เกิดข้อผิดพลาด ไม่สามารถสมัครสมาชิกได้ error : ",data.msg)
+      alert("เกิดข้อผิดพลาด ไม่สามารถสมัครสมาชิกได้ error : "+data.msg)
     }
    } catch (err) {
         console.error("เกิดข้อผิดพลาด ",err)
     }
   };
+
+  const signInFunction = async (data) => {
+   try {
+    const response = await fetch("http://localhost:3000/login_user", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (response.ok) {
+      alert("เข้าสู่ระบบเสร็จสิ้น");
+      formSignin.reset();
+      const data = await response.json()
+      localStorage.setItem("token"+data.token)
+    } else {
+      alert("เกิดข้อผิดพลาด ไม่สามารถเข้าสู่ระบบได้")
+    }
+   } catch (err) {
+        console.error("เกิดข้อผิดพลาด ",err)
+    }
+  };
+
 });
