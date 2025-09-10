@@ -78,4 +78,17 @@ router.put("/novel/:id", async (req, res) => {
   }
 });
 
+router.delete("/novel/:id", async (req, res) => {
+  try {
+    const novel = await Novel.findByIdAndDelete(req.params.id);
+    console.log(novel)
+    if (!novel) {
+        return res.status(404).json({ msg: "Novel not found" });
+    }  
+    res.json({ msg: "Delete Novel Success", novel });
+  } catch (err) {
+    res.status(500).json({ msg: "Delete Novel Failed", error: err.message });
+  }
+});
+
 module.exports = router;
