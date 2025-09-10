@@ -21,9 +21,8 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
         //function
-      signUpFunction(newUser);
+        signUpFunction(newUser);
       }
-      
     });
   }
 
@@ -35,135 +34,134 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const email = document.getElementById("emailLogin").value;
       const password = document.getElementById("passwordLogin").value;
-    
+
       const login = {
         email,
         password,
-      }
-      
+      };
+
       signInFunction(login);
     });
   }
 
-  //function Signup
-  const signUpFunction = async (data) => {
-   try {
-    const response = await fetch("http://localhost:3000/create_user", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (response.ok) {
-      alert("สมัครสมาชิกเสร็จสิ้น");
-      formSignup.reset();
-    } else {
-        const data = await response.json()
-      alert("เกิดข้อผิดพลาด ไม่สามารถสมัครสมาชิกได้ error : "+data.msg)
-    }
-   } catch (err) {
-        console.error("เกิดข้อผิดพลาด ",err)
-    }
-  };
-
-  //function Signin
-  const signInFunction = async (data) => {
-   try {
-    const response = await fetch("http://localhost:3000/login_user", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (response.ok) {
-      alert("เข้าสู่ระบบเสร็จสิ้น");
-      formSignin.reset();
-      const data = await response.json()
-      localStorage.setItem("token", data.token);
-      window.location.href = "/";
-    } else {
-      alert("เกิดข้อผิดพลาด ไม่สามารถเข้าสู่ระบบได้")
-    }
-   } catch (err) {
-        console.error("เกิดข้อผิดพลาด ",err)
+  const addNovelFunction = async (data) => {
+    try {
+      const response = await fetch("http://localhost:3000/admin/addNovel", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      
+      if (response.ok) {
+        alert("เพิ่มนิยายเสร็จสิ้น");
+        addNovel.reset();
+      } else {
+        const data = await response.json();
+        alert("เกิดข้อผิดพลาด ไม่สามารถเพิ่มนิยายได้ error : " + data.msg);
+      }
+    } catch (err) {
+      console.error("เกิดข้อผิดพลาด ", err);
     }
   };
-
-
-  // LOGOUT & Check Token
-  const token = localStorage.getItem('token');
-  const signinBtn = document.getElementById('signinBtn');
-  const userIcon = document.getElementById('userIcon');
-  const logoutBtn = document.getElementById('logout');
-
-  if (token) {
-      // If a token exists, show the user icon and hide the sign-in button
-      signinBtn.classList.add('hidden');
-      userIcon.classList.remove('hidden');
-  } else {
-      // If no token, show the sign-in button and hide the user icon
-      signinBtn.classList.remove('hidden');
-      userIcon.classList.add('hidden');
-  }
-
-  if (logoutBtn) {
-    logoutBtn.addEventListener('click', () => {
-      localStorage.removeItem('token');
-      signinBtn.classList.remove('hidden');
-      userIcon.classList.add('hidden');
-      // รีเฟรชหน้า หรือ redirect ไปหน้า login ถ้าต้องการ
-      // location.reload();
-    });
-  }
-
 
   //addNovel
   const addNovel = document.getElementById("addNovel");
   if (addNovel) {
     addNovel.addEventListener("submit", (e) => {
       e.preventDefault();
-
+      console.log("Form submit triggered");
       const nameNovel = document.getElementById("nameNovel").value;
       const contentNovel = document.getElementById("contentNovel").value;
-      const priceNovel = document.getElementById("priceNovel").value;
+      const priceNovel = parseInt(document.getElementById("priceNovel").value);
+      const imgNovel = document.getElementById("imageNovel").value;
+
 
       //เหลือ imgNovel
       const novel = {
         nameNovel,
         contentNovel,
-        priceNovel
-      }
-      
+        imgNovel,
+        priceNovel,
+      };
       addNovelFunction(novel);
-      
     });
   }
 
-  const addNovelFunction = async (data) => {
-   try {
-    const response = await fetch("http://localhost:3000/addNovel", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+  //function Signup
+  const signUpFunction = async (data) => {
+    try {
+      const response = await fetch("http://localhost:3000/create_user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
-    if (response.ok) {
-      alert("เพิ่มนิยายเสร็จสิ้น");
-      addNovel.reset();
-    } else {
-        const data = await response.json()
-      alert("เกิดข้อผิดพลาด ไม่สามารถเพิ่มนิยายได้ error : "+data.msg)
-    }
-   } catch (err) {
-        console.error("เกิดข้อผิดพลาด ",err)
+      if (response.ok) {
+        alert("สมัครสมาชิกเสร็จสิ้น");
+        formSignup.reset();
+      } else {
+        const data = await response.json();
+        alert("เกิดข้อผิดพลาด ไม่สามารถสมัครสมาชิกได้ error : " + data.msg);
+      }
+    } catch (err) {
+      console.error("เกิดข้อผิดพลาด ", err);
     }
   };
 
+  //function Signin
+  const signInFunction = async (data) => {
+    try {
+      const response = await fetch("http://localhost:3000/login_user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
+      if (response.ok) {
+        alert("เข้าสู่ระบบเสร็จสิ้น");
+        formSignin.reset();
+        const data = await response.json();
+        localStorage.setItem("token", data.token);
+        window.location.href = "/";
+      } else {
+        alert("เกิดข้อผิดพลาด ไม่สามารถเข้าสู่ระบบได้");
+      }
+    } catch (err) {
+      console.error("เกิดข้อผิดพลาด ", err);
+    }
+  };
+
+  // LOGOUT & Check Token
+  const token = localStorage.getItem("token");
+  const signinBtn = document.getElementById("signinBtn");
+  const userIcon = document.getElementById("userIcon");
+  const logoutBtn = document.getElementById("logout");
+
+  if (token) {
+    // If a token exists, show the user icon and hide the sign-in button
+    signinBtn.classList.add("hidden");
+    userIcon.classList.remove("hidden");
+  } else {
+    // If no token, show the sign-in button and hide the user icon
+    signinBtn.classList.remove("hidden");
+    userIcon.classList.add("hidden");
+  }
+
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+      localStorage.removeItem("token");
+      signinBtn.classList.remove("hidden");
+      userIcon.classList.add("hidden");
+      // รีเฟรชหน้า หรือ redirect ไปหน้า login ถ้าต้องการ
+      // location.reload();
+    });
+  }
+
+  
 });
