@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Your Redeem Code</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <div
+      class="bg-[url('/assets/bg.png')] bg-cover bg-center min-h-screen w-full"
+    >
+      <div class="w-full h-screen flex items-center justify-center">
+        <form class="p-5 grid bg-sky-200 w-fit rounded-xl transition duration-300 hover:scale-110">
+          <h1 class="text-center text-3xl font-bold mt-5 mb-3 bg-gradient-to-r from-purple-500 to-sky-500 bg-clip-text text-transparent animate-pulse">
+            Add Redeem Code Here!🃏
+          </h1>
+          <div class="mb-3">
+            <label class="text-xl">Name of Coupon:</label><br />
+            <input type="text" placeholder="ใส่ชื่อโค้ดของคุณ" required class="px-4 py-2 mt-2 rounded-lg w-full" />
+          </div>
+          <div class="mb-3">
+            <label class="text-xl">Code:</label><br />
+            <input type="text" placeholder="ใส่รหัสโค้ด" required class="px-4 py-2 mt-2 rounded-lg w-full" />
+          </div>
+          <div class="mb-3">
+            <label class="text-xl">Points:</label><br />
+            <input type="text" placeholder="ใส่พอยท์ของโค้ด a" required class="px-4 py-2 mt-2 rounded-lg w-full" />
+          </div>
+          <button class="mt-3 text-white font-bold justify-self-center bg-purple-400 w-40 h-10 rounded-lg hover:bg-purple-500 transition">Add</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

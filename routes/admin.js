@@ -7,7 +7,7 @@ router.get("/add_novel", (req,res) => {
 })
 
 router.get("/add_redeem", (req,res) => {
-    res.sendFile(path.join(__dirname,"..","views","add_redeem.html"));
+    res.sendFile(path.join(__dirname,"..","views","add_redeem_code.html"));
 })
 
 router.get("/dashboard", (req,res) => {
