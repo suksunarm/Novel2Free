@@ -335,4 +335,34 @@ document.addEventListener("DOMContentLoaded", () => {
       console.log("ออกจากระบบ");
     });
   }
+
 });
+
+async function addPoint(point){
+    try {
+      const res = await fetch(
+        "http://localhost:3000/addPoint",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ point }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        // อัปเดต DOM แบบเรียลไทม์ ไม่ต้อง reload
+        const pointDisplay = document.getElementById("pointValue");
+        if (pointDisplay) {
+          pointDisplay.textContent = "My Point : " + data.points;
+        }
+        alert(`${data.msg} +${point} Points`);
+      } else {
+        alert(data.msg || "เกิดข้อผิดพลาด");
+      }
+    } catch(err) {
+      console.error("เติมพอยท์ล้มเหลว ", err);
+    }
+  }
