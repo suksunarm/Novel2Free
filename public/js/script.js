@@ -351,12 +351,12 @@ async function addPoint(point){
       });
 
       const data = await res.json();
-      
+
       if (res.ok) {
         // อัปเดต DOM แบบเรียลไทม์ ไม่ต้อง reload
         const pointDisplay = document.getElementById("pointValue");
         if (pointDisplay) {
-          pointDisplay.textContent = data.points;
+          pointDisplay.textContent = "My Point : " + data.points;
         }
         alert(`${data.msg} +${point} Points`);
       } else {
