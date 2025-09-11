@@ -1,4 +1,29 @@
 document.addEventListener("DOMContentLoaded", () => {
+  //function Signin
+  const signInFunction = async (data) => {
+    try {
+      const response = await fetch("http://localhost:3000/login_user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        alert("เข้าสู่ระบบเสร็จสิ้น");
+        formSignin.reset();
+        const data = await response.json();
+        localStorage.setItem("token", data.token);
+        window.location.href = data.redirectPath;
+      } else {
+        alert("เกิดข้อผิดพลาด ไม่สามารถเข้าสู่ระบบได้");
+      }
+    } catch (err) {
+      console.error("เกิดข้อผิดพลาด ", err);
+    }
+  };
+
   //Signup
   const formSignup = document.getElementById("Signup");
   if (formSignup) {
@@ -179,7 +204,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  document.querySelectorAll(".delete-btn").forEach(btn => {
+  document.querySelectorAll(".delete-btn").forEach((btn) => {
     btn.addEventListener("click", (e) => {
       const novelId = btn.dataset.id; // กำหนด data-id ในปุ่ม delete
       if (confirm("คุณต้องการลบนิยายนี้จริงหรือไม่?")) {
@@ -199,7 +224,9 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
       const nameCoupon = document.getElementById("nameCoupon").value;
       const codeCoupon = document.getElementById("codeCoupon").value;
-      const pointsCoupon = parseInt(document.getElementById("pointsCoupon").value);
+      const pointsCoupon = parseInt(
+        document.getElementById("pointsCoupon").value
+      );
 
       //เหลือ imgNovel
       const redeemCode = {
@@ -234,31 +261,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  //function Signin
-  const signInFunction = async (data) => {
-    try {
-      const response = await fetch("http://localhost:3000/login_user", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (response.ok) {
-        alert("เข้าสู่ระบบเสร็จสิ้น");
-        formSignin.reset();
-        const data = await response.json();
-        localStorage.setItem("token", data.token);
-        window.location.href = data.redirectPath;
-      } else {
-        alert("เกิดข้อผิดพลาด ไม่สามารถเข้าสู่ระบบได้");
-      }
-    } catch (err) {
-      console.error("เกิดข้อผิดพลาด ", err);
-    }
-  };
-
   const logoutFunction = () => {
     try {
       const response = fetch("http://localhost:3000/logout", {
@@ -272,19 +274,22 @@ document.addEventListener("DOMContentLoaded", () => {
   //function Add Coupon
   const addRedeemCodeFunction = async (data) => {
     try {
-      const response = await fetch("http://localhost:3000/admin/add-Redeem-Code", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        "http://localhost:3000/admin/add-Redeem-Code",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
 
       if (response.ok) {
         alert("เพิ่มคูปองสำเร็จ!");
         addRedeemCode.reset();
         const data = await response.json();
-        console.log(data.copon)
+        console.log(data.copon);
       } else {
         const data = await response.json();
         alert("เกิดข้อผิดพลาด ไม่สามารถเพิ่ม Coupon ได้: " + data.msg);
@@ -321,7 +326,7 @@ document.addEventListener("DOMContentLoaded", () => {
       logoutFunction();
     });
   }
-  
+
   if (logoutAdmin) {
     logoutAdmin.addEventListener("click", () => {
       localStorage.removeItem("token");

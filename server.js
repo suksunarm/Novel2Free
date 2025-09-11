@@ -79,7 +79,9 @@ app.post("/login_user", async (req, res) => {
 });
 
 app.get("/logout", async (req, res) => {
-  res.clearCookie("token");
+  res.clearCookie("token", {
+    httpOnly: true,
+  });
   res.redirect("/signin");
 });
 
