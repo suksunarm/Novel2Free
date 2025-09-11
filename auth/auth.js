@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
+const User = require("../model/user");
 
-function authMiddleware(req, res, next) {
+async function authMiddleware(req, res, next) {
   const token = req.cookies.token; // ดึงจาก cookie
 
   if (!token) {
@@ -9,7 +10,8 @@ function authMiddleware(req, res, next) {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // เก็บข้อมูล user
+    const user = await User.findById(decoded.id);
+    req.user = user; // เก็บข้อมูล user
     next();
   } catch (err) {
     return res.redirect("/signin"); // token ไม่ถูกต้อง → redirect

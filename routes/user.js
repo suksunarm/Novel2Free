@@ -25,11 +25,33 @@ router.get("/cart", authMiddleware, (req, res) => {
   res.render("cart", { pageTitle: "ตะกร้าสินค้า" });
 });
 
-router.get("/point", authMiddleware ,(req, res) => {
-  if (req.user.role !== role) {
+router.get("/point", authMiddleware , async (req, res) => {
+  const user = req.user;
+  if (user.role !== role) {
     return res.redirect("/signin");
   }
-  res.render("point", { pageTitle: "เติมพอยท์" });
+  res.render("point", { pageTitle: "เติมพอยท์" , user});
+});
+
+router.post("/addPoint", authMiddleware , async (req, res) => {
+  try {
+    const { point } = req.body;
+    const userId = req.user._id;
+    
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $inc: { points: point } },
+      { new: true } // return document หลังอัปเดต
+    );
+    res.json({ 
+      msg: "เติมพอยท์สำเร็จ", 
+      points: updatedUser.points // ส่งค่าปัจจุบันของ user กลับ
+    });
+  } 
+  catch(err) {
+    res.status(500).json({ msg: "เติมพอยท์ล้มเหลว", error: err.message });
+  }
+
 });
 
 router.get("/signup", (req, res) => {
