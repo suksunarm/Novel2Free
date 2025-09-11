@@ -112,6 +112,128 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  const addRedeemCode = document.getElementById("addRedeemCode");
+  if (addRedeemCode) {
+    addRedeemCode.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const nameCoupon = document.getElementById("nameCoupon").value;
+      const codeCoupon = document.getElementById("codeCoupon").value;
+      const pointsCoupon = parseInt(
+        document.getElementById("pointsCoupon").value
+      );
+
+      //เหลือ imgNovel
+      const redeemCode = {
+        nameCoupon,
+        codeCoupon,
+        pointsCoupon,
+      };
+      addRedeemCodeFunction(redeemCode);
+    });
+  }
+
+  //function Signup
+  const signUpFunction = async (data) => {
+    try {
+      const response = await fetch("http://localhost:3000/create_user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        alert("สมัครสมาชิกเสร็จสิ้น");
+        formSignup.reset();
+      } else {
+        const data = await response.json();
+        alert("เกิดข้อผิดพลาด ไม่สามารถสมัครสมาชิกได้ error : " + data.msg);
+      }
+    } catch (err) {
+      console.error("เกิดข้อผิดพลาด ", err);
+    }
+  };
+
+  const logoutFunction = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/logout", {
+        method: "GET",
+        credentials: "include",
+      });
+    } catch (err) {
+      console.error("เกิดข้อผิดพลาด ไม่สามารถลบคุกกี้ได้", err);
+    }
+  };
+
+  //function Add Coupon
+  const addRedeemCodeFunction = async (data) => {
+    try {
+      const response = await fetch(
+        "http://localhost:3000/admin/add-Redeem-Code",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      if (response.ok) {
+        alert("เพิ่มคูปองสำเร็จ!");
+        addRedeemCode.reset();
+        const data = await response.json();
+        console.log(data.copon);
+      } else {
+        const data = await response.json();
+        alert("เกิดข้อผิดพลาด ไม่สามารถเพิ่ม Coupon ได้: " + data.msg);
+      }
+    } catch (err) {
+      console.error("เกิดข้อผิดพลาด ", err);
+    }
+  };
+
+  // LOGOUT & Check Token
+  const token = localStorage.getItem("token");
+  const signinBtn = document.getElementById("signinBtn");
+  const userIcon = document.getElementById("userIcon");
+  const logoutBtn = document.getElementById("logout");
+  const logoutAdmin = document.getElementById("logoutAdmin");
+
+  if (signinBtn && userIcon) {
+    if (token) {
+      signinBtn.classList.add("hidden");
+      userIcon.classList.remove("hidden");
+    } else {
+      signinBtn.classList.remove("hidden");
+      userIcon.classList.add("hidden");
+      logoutBtn.classList.add("hidden")
+    }
+  }
+
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", async () => {
+      console.log("Logout clicked");
+      localStorage.removeItem("token");
+      await logoutFunction();
+      window.location.href = "/";
+      signinBtn.classList.remove("hidden");
+      userIcon.classList.add("hidden");
+      // รีเฟรชหน้า หรือ redirect ไปหน้า login ถ้าต้องการ
+      // location.reload();
+    });
+  }
+
+  if (logoutAdmin) {
+    logoutAdmin.addEventListener("click", async () => {
+      localStorage.removeItem("token");
+      await logoutFunction();
+      window.location.href = "/";
+      console.log("ออกจากระบบ");
+    });
+  }
+
   // Edit Novel
   const editModal = document.getElementById("editModal");
   const editForm = document.getElementById("editNovelForm");
@@ -170,21 +292,23 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // จัดการ form ข้างใน modal (เมื่อกด Save)
-  editForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const novelId = editForm.dataset.novelId;
-    const editName = document.getElementById("editName").value;
-    const editContent = document.getElementById("editContent").value;
-    const editPrice = document.getElementById("editPrice").value;
-    const editImage = document.getElementById("editImage").value;
-    const novel = {
-      editName,
-      editContent,
-      editPrice,
-      editImage,
-    };
-    editNovelFunction(novelId, novel);
-  });
+  if (editForm) {
+    editForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const novelId = editForm.dataset.novelId;
+      const editName = document.getElementById("editName").value;
+      const editContent = document.getElementById("editContent").value;
+      const editPrice = document.getElementById("editPrice").value;
+      const editImage = document.getElementById("editImage").value;
+      const novel = {
+        editName,
+        editContent,
+        editPrice,
+        editImage,
+      };
+      editNovelFunction(novelId, novel);
+    });
+  }
 
   const deleteNovelFunction = async (novelId) => {
     try {
@@ -214,125 +338,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // ปิด modal
-  closeEditModal.addEventListener("click", () => {
-    editModal.classList.add("hidden");
-  });
-
-  const addRedeemCode = document.getElementById("addRedeemCode");
-  if (addRedeemCode) {
-    addRedeemCode.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const nameCoupon = document.getElementById("nameCoupon").value;
-      const codeCoupon = document.getElementById("codeCoupon").value;
-      const pointsCoupon = parseInt(
-        document.getElementById("pointsCoupon").value
-      );
-
-      //เหลือ imgNovel
-      const redeemCode = {
-        nameCoupon,
-        codeCoupon,
-        pointsCoupon,
-      };
-      addRedeemCodeFunction(redeemCode);
-    });
-  }
-
-  //function Signup
-  const signUpFunction = async (data) => {
-    try {
-      const response = await fetch("http://localhost:3000/create_user", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (response.ok) {
-        alert("สมัครสมาชิกเสร็จสิ้น");
-        formSignup.reset();
-      } else {
-        const data = await response.json();
-        alert("เกิดข้อผิดพลาด ไม่สามารถสมัครสมาชิกได้ error : " + data.msg);
-      }
-    } catch (err) {
-      console.error("เกิดข้อผิดพลาด ", err);
-    }
-  };
-
-  const logoutFunction = () => {
-    try {
-      const response = fetch("http://localhost:3000/logout", {
-        method: "GET",
-      });
-    } catch (err) {
-      console.error("เกิดข้อผิดพลาด ไม่สามารถลบคุกกี้ได้", err);
-    }
-  };
-
-  //function Add Coupon
-  const addRedeemCodeFunction = async (data) => {
-    try {
-      const response = await fetch(
-        "http://localhost:3000/admin/add-Redeem-Code",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
-
-      if (response.ok) {
-        alert("เพิ่มคูปองสำเร็จ!");
-        addRedeemCode.reset();
-        const data = await response.json();
-        console.log(data.copon);
-      } else {
-        const data = await response.json();
-        alert("เกิดข้อผิดพลาด ไม่สามารถเพิ่ม Coupon ได้: " + data.msg);
-      }
-    } catch (err) {
-      console.error("เกิดข้อผิดพลาด ", err);
-    }
-  };
-
-  // LOGOUT & Check Token
-  const token = localStorage.getItem("token");
-  const signinBtn = document.getElementById("signinBtn");
-  const userIcon = document.getElementById("userIcon");
-  const logoutBtn = document.getElementById("logout");
-  const logoutAdmin = document.getElementById("logoutAdmin");
-
-  if (signinBtn && userIcon) {
-    if (token) {
-      signinBtn.classList.add("hidden");
-      userIcon.classList.remove("hidden");
-    } else {
-      signinBtn.classList.remove("hidden");
-      userIcon.classList.add("hidden");
-    }
-  }
-
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", () => {
-      localStorage.removeItem("token");
-      signinBtn.classList.remove("hidden");
-      userIcon.classList.add("hidden");
-      // รีเฟรชหน้า หรือ redirect ไปหน้า login ถ้าต้องการ
-      // location.reload();
-      logoutFunction();
-    });
-  }
-
-  if (logoutAdmin) {
-    logoutAdmin.addEventListener("click", () => {
-      localStorage.removeItem("token");
-      logoutFunction();
-      window.location.href = "/signin";
-      console.log("ออกจากระบบ");
+  if (closeEditModal) {
+    closeEditModal.addEventListener("click", () => {
+      editModal.classList.add("hidden");
     });
   }
 

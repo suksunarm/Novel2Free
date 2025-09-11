@@ -19,9 +19,10 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/cart", authMiddleware, (req, res) => {
-  if (req.user.role !== role) {
-    return res.redirect("/signin");
-  }
+  const user = req.user;
+    if (user.role !== role) {
+      return res.redirect("/signin");
+    }
   res.render("cart", { pageTitle: "ตะกร้าสินค้า" });
 });
 
@@ -51,8 +52,6 @@ router.post("/addPoint", authMiddleware , async (req, res) => {
   catch(err) {
     res.status(500).json({ msg: "เติมพอยท์ล้มเหลว", error: err.message });
   }
-
-});
 
 router.get("/signup", (req, res) => {
   res.render("sign_up", { pageTitle: "สมัครสมาชิก" });
