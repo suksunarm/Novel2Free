@@ -21,6 +21,26 @@ router.get("/add_redeem", authMiddleware, (req, res) => {
   res.render("add_redeem_code", { pageTitle: "เพิ่มคูปอง" });
 });
 
+
+router.get("/dashboard", async (req, res) => {
+    try {
+        const novels = await Novel.find()
+        res.render("dashboard_admin", { pageTitle: "แดชบอร์ด" , novels});
+    } catch(err) {
+        res.status(500).send("Failed to fetch novels: " + err.message);
+    }
+  
+});
+
+router.get("/novel/:id", async (req, res) => {
+  try {
+    const novel = await Novel.findById(req.params.id);
+    if (!novel) return res.status(404).json({ msg: "Novel not found" });
+    res.json(novel);
+  } catch (err) {
+    res.status(500).json({ msg: "Error", err });
+  }
+  
 router.get("/dashboard", authMiddleware, (req, res) => {
   if (req.user.role !== role) {
     return res.redirect("/signin");
@@ -53,6 +73,39 @@ router.post("/addNovel", async (req, res) => {
   }
 });
 
+router.put("/novel/:id", async (req, res) => {
+  try {
+    const { editName, editContent,  editImage, editPrice } = req.body;
+    const novel = await Novel.findByIdAndUpdate(
+      req.params.id,
+      {
+        title: editName,
+        content: editContent,
+        image_url: editImage,
+        price: editPrice,
+      },
+      { new: true }
+    );
+    if (!novel) return res.status(404).json({ msg: "Novel not found" });
+    res.json({ msg: "Edit Novel Success", novel });
+  } catch (err) {
+    res.status(500).json({ msg: "Add Novel Failed, error message:", err });
+  }
+});
+
+router.delete("/novel/:id", async (req, res) => {
+  try {
+    const novel = await Novel.findByIdAndDelete(req.params.id);
+    console.log(novel)
+    if (!novel) {
+        return res.status(404).json({ msg: "Novel not found" });
+    }  
+    res.json({ msg: "Delete Novel Success", novel });
+  } catch (err) {
+    res.status(500).json({ msg: "Delete Novel Failed", error: err.message });
+  }
+});
+
 router.post("/add-Redeem-Code", async (req, res) => {
   try {
     const { nameCoupon, codeCoupon, pointsCoupon } = req.body;
@@ -76,6 +129,5 @@ router.post("/add-Redeem-Code", async (req, res) => {
     res.status(500).json({ msg: "Add Coupon Failed, error message:", err });
   }
 });
-
 
 module.exports = router;

@@ -87,6 +87,112 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Edit Novel
+  const editModal = document.getElementById("editModal");
+  const editForm = document.getElementById("editNovelForm");
+  const closeEditModal = document.getElementById("closeEditModal");
+
+  // ปุ่มเปิด modal
+  document.querySelectorAll(".edit-btn").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const novelId = btn.dataset.id;
+      try {
+        // ดึงข้อมูลนิยายจาก backend
+        const response = await fetch(`/admin/novel/${novelId}`);
+        if (!response.ok) throw new Error("Failed to fetch novel data");
+        const novelData = await response.json();
+
+        // ใส่ข้อมูลลงใน modal
+        document.getElementById("editName").value = novelData.title;
+        document.getElementById("editContent").value = novelData.content;
+        document.getElementById("editPrice").value = novelData.price;
+        document.getElementById("editImage").value = novelData.image_url || "";
+
+        // เปิด modal
+        editModal.classList.remove("hidden");
+        editModal.classList.add("flex");
+
+        // เก็บ novelId ไว้ใน form
+        editForm.dataset.novelId = novelId;
+      } catch (err) {
+        alert("ไม่สามารถดึงข้อมูลนิยายเพื่อแก้ไขได้");
+        console.error(err);
+      }
+    });
+  });
+
+  const editNovelFunction = async (novelId, data) => {
+    try {
+      const response = await fetch(`/admin/novel/${novelId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        alert("แก้ไขนิยายเสร็จสิ้น");
+        editModal.classList.add("hidden");
+        location.reload();
+      } else {
+        const data = await response.json();
+        alert("เกิดข้อผิดพลาด ไม่สามารถแก้ไขนิยายได้ error : " + data.msg);
+      }
+    } catch (err) {
+      console.error("เกิดข้อผิดพลาด ", err);
+    }
+  };
+
+  // จัดการ form ข้างใน modal (เมื่อกด Save)
+  editForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const novelId = editForm.dataset.novelId;
+    const editName = document.getElementById("editName").value;
+    const editContent = document.getElementById("editContent").value;
+    const editPrice = document.getElementById("editPrice").value;
+    const editImage = document.getElementById("editImage").value;
+    const novel = {
+      editName,
+      editContent,
+      editPrice,
+      editImage,
+    };
+    editNovelFunction(novelId, novel);
+  });
+
+  const deleteNovelFunction = async (novelId) => {
+    try {
+      const response = await fetch(`/admin/novel/${novelId}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        alert("ลบนิยายเสร็จสิ้น");
+        location.reload();
+      } else {
+        const data = await response.json();
+        alert("เกิดข้อผิดพลาด ไม่สามารถลบนิยายได้ error : " + data.msg);
+      }
+    } catch (err) {
+      console.error("เกิดข้อผิดพลาด ", err);
+    }
+  };
+
+  document.querySelectorAll(".delete-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      const novelId = btn.dataset.id; // กำหนด data-id ในปุ่ม delete
+      if (confirm("คุณต้องการลบนิยายนี้จริงหรือไม่?")) {
+        deleteNovelFunction(novelId);
+      }
+    });
+  });
+
+  // ปิด modal
+  closeEditModal.addEventListener("click", () => {
+    editModal.classList.add("hidden");
+  });
+
   const addRedeemCode = document.getElementById("addRedeemCode");
   if (addRedeemCode) {
     addRedeemCode.addEventListener("submit", (e) => {
@@ -215,7 +321,7 @@ document.addEventListener("DOMContentLoaded", () => {
       logoutFunction();
     });
   }
-
+  
   if (logoutAdmin) {
     logoutAdmin.addEventListener("click", () => {
       localStorage.removeItem("token");
