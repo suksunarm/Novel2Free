@@ -105,7 +105,8 @@
       <!-- Content -->
       <div class="grid grid-cols-6 px-30 place-items-center gap-y-5">
         <% novels.forEach(novel => { %>
-        <div
+        <a
+          href="/detail_novel/<%= novel._id %>"
           class="text-white bg-white/10 w-[200px] rounded-xl overflow-hidden shadow-2xl"
         >
           <div class="h-[130px] w-full">
@@ -140,7 +141,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </a>
         <% }) %>
       </div>
       <div
