@@ -19,16 +19,18 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/cart", authMiddleware, (req, res) => {
-  if (req.user.role !== role) {
-    return res.redirect("/signin");
-  }
+  const user = req.user;
+    if (user.role !== role) {
+      return res.redirect("/signin");
+    }
   res.render("cart", { pageTitle: "ตะกร้าสินค้า" });
 });
 
 router.get("/point", authMiddleware ,(req, res) => {
-  if (req.user.role !== role) {
-    return res.redirect("/signin");
-  }
+  const user = req.user;
+    if (user.role !== role) {
+      return res.redirect("/signin");
+    }
   res.render("point", { pageTitle: "เติมพอยท์" });
 });
 

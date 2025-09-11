@@ -208,6 +208,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       signinBtn.classList.remove("hidden");
       userIcon.classList.add("hidden");
+      logoutBtn.classList.add("hidden")
     }
   }
 

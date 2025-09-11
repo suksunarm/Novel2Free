@@ -8,22 +8,25 @@ const authMiddleware = require("../auth/auth");
 const role = "admin";
 
 router.get("/add_novel", authMiddleware, (req, res) => {
-  if (req.user.role !== role) {
-    return res.redirect("/signin");
-  }
+  const user = req.user;
+    if (user.role !== role) {
+      return res.redirect("/signin");
+    }
   res.render("add_novel", { pageTitle: "เพิ่มนิยาย" });
 });
 
 router.get("/add_redeem", authMiddleware, (req, res) => {
-  if (req.user.role !== role) {
-    return res.redirect("/signin");
-  }
+  const user = req.user;
+    if (user.role !== role) {
+      return res.redirect("/signin");
+    }
   res.render("add_redeem_code", { pageTitle: "เพิ่มคูปอง" });
 });
 
 router.get("/dashboard", authMiddleware, async (req, res) => {
   try {
-    if (req.user.role !== role) {
+    const user = req.user;
+    if (user.role !== role) {
       return res.redirect("/signin");
     }
     const novels = await Novel.find();
@@ -35,7 +38,8 @@ router.get("/dashboard", authMiddleware, async (req, res) => {
 
 router.get("/novel/:id", authMiddleware ,async (req, res) => {
   try {
-    if (req.user.role !== role) {
+    const user = req.user;
+    if (user.role !== role) {
       return res.redirect("/signin");
     }
     const novel = await Novel.findById(req.params.id);

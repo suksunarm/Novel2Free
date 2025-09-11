@@ -12,75 +12,77 @@
     >
       <!-- Navbar -->
       <div
-        class="flex text-white justify-between p-5 items-center px-30 bg-black/30 shadow-xl mb-5"
+        class="flex text-white justify-between items-center p-5 px-10 bg-black/50 backdrop-blur-md shadow-xl mb-5 rounded-b-xl"
       >
-        <div class="font-extrabold text-4xl px-10">Novel2Free</div>
-        <div class="flex gap-x-2 items-center">
+        <div class="font-extrabold text-4xl">Novel2Free</div>
+        <div class="flex gap-3 items-center">
+          <!-- Cart Button -->
           <a
             href="/cart"
-            class="flex bg-white rounded-xl p-2 px-4 items-center gap-1 bg-white/70"
+            class="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#6E5A8A]/70 hover:bg-[#8164FF]/80 transform transition-all duration-300 hover:scale-105 shadow-lg"
           >
-            <div class="text-white">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="26"
-                height="26"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="lucide lucide-shopping-cart-icon lucide-shopping-cart"
-              >
-                <circle cx="8" cy="21" r="1" />
-                <circle cx="19" cy="21" r="1" />
-                <path
-                  d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"
-                />
-              </svg>
-            </div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              class="w-6 h-6"
+            >
+              <circle cx="8" cy="21" r="1" />
+              <circle cx="19" cy="21" r="1" />
+              <path
+                d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"
+              />
+            </svg>
+            <span>ตะกร้า</span>
           </a>
+
+          <!-- My Novels -->
           <a
             href="/point"
-            class="flex bg-white/70 rounded-xl p-2 px-4 items-center gap-1"
+            class="px-4 py-2 rounded-xl bg-[#6E5A8A]/70 hover:bg-[#8164FF]/80 transition-all duration-300 transform hover:scale-105 shadow-lg"
           >
-            <div class="font-semibold text-xl text-white">นิยายของฉัน</div>
+            <span class="font-semibold text-white">นิยายของฉัน</span>
           </a>
+
+          <!-- Points -->
           <a
             href="/point"
-            class="flex bg-white/70 rounded-xl p-2 px-4 items-center gap-1"
+            class="flex items-center gap-1 px-4 py-2 rounded-xl bg-[#6E5A8A]/70 hover:bg-[#8164FF]/80 transition-all duration-300 transform hover:scale-105 shadow-lg"
           >
-            <div class="font-semibold text-xl text-white">25023</div>
-            <div class="text-yellow-400">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="lucide lucide-star-icon lucide-star"
-              >
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
-                />
-              </svg>
-            </div>
+            <span class="font-semibold text-white">25023</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="text-yellow-400 w-5 h-5"
+            >
+              <path
+                d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
+              />
+            </svg>
           </a>
+
+          <!-- Sign In -->
           <a
             href="/signin"
             id="signinBtn"
-            class="font-semibold text-xl bg-white rounded-xl p-2 px-4 text-black bg-white/70"
+            class="px-4 py-2 rounded-xl bg-[#6E5A8A]/70 hover:bg-[#8164FF]/80 text-white font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg"
           >
             เข้าสู่ระบบ
           </a>
+
+          <!-- User Icon -->
           <div
             id="userIcon"
-            class="bg-white rounded-xl p-2 px-4 flex items-center bg-white/70 hidden"
+            class="p-2 rounded-xl bg-[#6E5A8A]/70 flex items-center hidden hover:brightness-125 transition-all duration-300"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -93,10 +95,11 @@
               <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
             </svg>
           </div>
+
+          <!-- Logout -->
           <button
             id="logout"
-            type="button"
-            class="bg-gradient-to-r from-[#8164FF] to-[#CB52FF] text-white font-bold rounded-[10px] p-2"
+            class="px-4 py-2 rounded-xl bg-gradient-to-r from-[#8164FF] to-[#CB52FF] hover:from-[#9277FF] hover:to-[#D564FF] text-white font-bold transition-all duration-300 transform hover:scale-105 shadow-lg"
           >
             ออกจากระบบ
           </button>
