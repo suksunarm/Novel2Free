@@ -56,8 +56,10 @@ router.post("/create_user", async (req, res) => {
   }
 });
 
-router.get("/detail_novel", (req, res) => {
-  res.render("detail_novel", { pageTitle: "นิยาย" });
+router.get("/detail_novel/:id", async (req, res) => {
+  const novelId = req.params.id;
+  const novel = await Novel.findById(novelId);
+  res.render("detail_novel", { pageTitle: novel.title , novel });
 });
 
 module.exports = router;
