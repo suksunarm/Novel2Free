@@ -12,7 +12,7 @@
     >
       <div>
         <nav
-          class="fixed top-0 left-0 text-white bg-gradient-to-r from-purple-950 to-purple-800 w-64 h-screen shadow-lg transition-all duration-500"
+          class="fixed top-0 left-0 text-white bg-[#5D4F71] w-64 h-screen shadow-lg transition-all duration-500"
         >
           <h1 class="my-6 mx-6 text-3xl font-bold">Admin</h1>
           <ul class="flex text-xl flex-col justify-between h-[calc(100%-5rem)]">
@@ -44,7 +44,7 @@
               <li
                 class="py-3 px-6 rounded hover:bg-purple-400 transition-all duration-300 transform hover:scale-105 hover:translate-x-1 cursor-pointer"
               >
-                <a href="/admin/add_novel" class="flex gap-3 items-center">
+                <a href="/admin/add_novel" target="_blank" class="flex gap-3 items-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -69,7 +69,7 @@
               <li
                 class="py-3 px-6 rounded hover:bg-purple-400 transition-all duration-300 transform hover:scale-105 hover:translate-x-1 cursor-pointer"
               >
-                <a href="/admin/add_redeem" class="flex gap-3 items-center">
+                <a href="/admin/add_redeem" target="_blank" class="flex gap-3 items-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -91,13 +91,13 @@
                 </a>
               </li>
             </div>
-            <li class="text-xl flex justify-center mb-6">
-              <button
+            <div class="text-xl flex justify-center mb-6">
+              <button type="button" id="logoutAdmin"
                 class="bg-rose-700 w-40 h-10 rounded-lg hover:bg-rose-600 transition"
               >
                 Logout
               </button>
-            </li>
+            </div>
           </ul>
         </nav>
       </div>

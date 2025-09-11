@@ -5,21 +5,30 @@ const bcrypt = require("bcrypt");
 const User = require("../model/user");
 const Novel = require("../model/novel");
 const jwt = require("jsonwebtoken");
+const authMiddleware = require("../auth/auth");
+
+const role = "user";
 
 router.get("/", async (req, res) => {
   try {
-    const novels = await Novel.find(); 
-    res.render("home_page", { pageTitle: "หน้าหลัก" , novels });
+    const novels = await Novel.find();
+    res.render("home_page", { pageTitle: "หน้าหลัก", novels });
   } catch (err) {
-     res.status(500).send("Failed to fetch novels: " + err.message);
+    res.status(500).send("Failed to fetch novels: " + err.message);
   }
 });
 
-router.get("/cart", (req, res) => {
+router.get("/cart", authMiddleware, (req, res) => {
+  if (req.user.role !== role) {
+    return res.redirect("/signin");
+  }
   res.render("cart", { pageTitle: "ตะกร้าสินค้า" });
 });
 
-router.get("/point", (req, res) => {
+router.get("/point", authMiddleware ,(req, res) => {
+  if (req.user.role !== role) {
+    return res.redirect("/signin");
+  }
   res.render("point", { pageTitle: "เติมพอยท์" });
 });
 

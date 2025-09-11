@@ -2,14 +2,25 @@ const express = require("express");
 const router = express.Router();
 const path = require("path");
 const Novel = require("../model/novel");
+const Coupon = require("../model/coupon");
+const authMiddleware = require("../auth/auth");
 
-router.get("/add_novel", (req, res) => {
+const role = "admin"
+
+router.get("/add_novel", authMiddleware, (req, res) => {
+  if (req.user.role !== role) {
+    return res.redirect("/signin");
+  }
   res.render("add_novel", { pageTitle: "เพิ่มนิยาย" });
 });
 
-router.get("/add_redeem", (req, res) => {
+router.get("/add_redeem", authMiddleware, (req, res) => {
+  if (req.user.role !== role) {
+    return res.redirect("/signin");
+  }
   res.render("add_redeem_code", { pageTitle: "เพิ่มคูปอง" });
 });
+
 
 router.get("/dashboard", async (req, res) => {
     try {
@@ -29,6 +40,12 @@ router.get("/novel/:id", async (req, res) => {
   } catch (err) {
     res.status(500).json({ msg: "Error", err });
   }
+  
+router.get("/dashboard", authMiddleware, (req, res) => {
+  if (req.user.role !== role) {
+    return res.redirect("/signin");
+  }
+  res.render("dashboard_admin", { pageTitle: "แดชบอร์ด" });
 });
 
 router.post("/addNovel", async (req, res) => {
@@ -40,8 +57,6 @@ router.post("/addNovel", async (req, res) => {
       image_url: imgNovel,
       price: priceNovel,
     });
-
-    console.log("api เส้น add Novel");
 
     await novel.save();
     res.status(201).json({
@@ -88,6 +103,30 @@ router.delete("/novel/:id", async (req, res) => {
     res.json({ msg: "Delete Novel Success", novel });
   } catch (err) {
     res.status(500).json({ msg: "Delete Novel Failed", error: err.message });
+  }
+});
+
+router.post("/add-Redeem-Code", async (req, res) => {
+  try {
+    const { nameCoupon, codeCoupon, pointsCoupon } = req.body;
+    const coupon = new Coupon({
+      Name: nameCoupon,
+      code: codeCoupon,
+      points: pointsCoupon,
+    });
+
+    await coupon.save();
+    res.status(201).json({
+      msg: "Add Redeem Success",
+      coupon: {
+        Name: coupon.Name,
+        code: coupon.code,
+        points: coupon.points,
+      },
+    });
+    res.redirect('/dashboard')
+  } catch (err) {
+    res.status(500).json({ msg: "Add Coupon Failed, error message:", err });
   }
 });
 
