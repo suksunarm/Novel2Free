@@ -82,7 +82,7 @@ app.get("/logout", async (req, res) => {
   res.clearCookie("token", {
     httpOnly: true,
   });
-  res.redirect("/signin");
+  res.status(200).send({ msg: "Logged out And Clear Cookies" });
 });
 
 app.use((req, res) => {
