@@ -1,64 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%= pageTitle %></title>
-     <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body>
-    <div class="bg-[url('/assets/bg.png')] bg-cover bg-center min-h-screen w-full flex items-center">
-  <div class="text-white p-8 max-w-4xl mx-auto bg-gradient-to-br from-purple-900/70 to-indigo-900/70 backdrop-blur-md rounded-2xl shadow-2xl p-6 border border-purple-700/50">
-    
-    <!-- Title -->
-    <h1 class="text-4xl font-extrabold text-center mb-8">
-      🛒 Your Manga Cart
-    </h1>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <div
+      class="bg-[url('/assets/bg.png')] bg-cover bg-center min-h-screen w-full flex items-center"
+    >
+      <div
+        class="text-white p-8 max-w-4xl mx-auto bg-gradient-to-br from-purple-900/70 to-indigo-900/70 backdrop-blur-md rounded-2xl shadow-2xl p-6 border border-purple-700/50"
+      >
+        <!-- Title -->
+        <h1 class="text-4xl font-extrabold text-center mb-8">
+          🛒 Your Manga Cart
+        </h1>
 
-    <div class="space-y-6">
-      <div class="flex items-center justify-between bg-gradient-to-r from-purple-800/60 to-indigo-800/60 p-4 rounded-xl shadow hover:shadow-lg transition">
-        <div class="flex items-center gap-4">
-          <img src="https://via.placeholder.com/80x100" alt="Novel Cover" class="w-20 h-24 rounded-lg shadow-md" />
-          <div>
-            <h2 class="text-xl font-bold text-pink-300">วิทย์กีฬาและเรื่องเล่าสยองหมี</h2>
-            <p class="text-gray-300 text-sm">• Novel</p>
+        <div class="space-y-6">
+          <div
+            class="flex items-center justify-between bg-gradient-to-r from-purple-800/60 to-indigo-800/60 p-4 rounded-xl shadow hover:shadow-lg transition"
+          >
+            <div class="flex items-center gap-4">
+              <img
+                src="https://via.placeholder.com/80x100"
+                alt="Novel Cover"
+                class="w-20 h-24 rounded-lg shadow-md"
+              />
+              <div>
+                <h2 class="text-xl font-bold text-pink-300">
+                  วิทย์กีฬาและเรื่องเล่าสยองหมี
+                </h2>
+                <p class="text-gray-300 text-sm">• Novel</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-4">
+              <span class="text-lg font-semibold text-cyan-300">฿120</span>
+              <button
+                class="px-3 py-1 rounded-lg bg-rose-600 hover:bg-rose-700 transition"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+
+          <div
+            class="flex items-center justify-between bg-gradient-to-r from-purple-800/60 to-indigo-800/60 p-4 rounded-xl shadow hover:shadow-lg transition"
+          >
+            <div class="flex items-center gap-4">
+              <img
+                src="https://via.placeholder.com/80x100"
+                alt="Novel Cover"
+                class="w-20 h-24 rounded-lg shadow-md"
+              />
+              <div>
+                <h2 class="text-xl font-bold text-green-300">อบ.กับสก๊อย</h2>
+                <p class="text-gray-300 text-sm">• Novel</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-4">
+              <span class="text-lg font-semibold text-yellow-300">฿150</span>
+              <button
+                class="px-3 py-1 rounded-lg bg-rose-600 hover:bg-rose-700 transition"
+              >
+                Delete
+              </button>
+            </div>
           </div>
         </div>
-        <div class="flex items-center gap-4">
-          <span class="text-lg font-semibold text-cyan-300">฿120</span>
-          <button class="px-3 py-1 rounded-lg bg-rose-600 hover:bg-rose-700 transition">Delete</button>
-        </div>
-      </div>
-
-      <div class="flex items-center justify-between bg-gradient-to-r from-purple-800/60 to-indigo-800/60 p-4 rounded-xl shadow hover:shadow-lg transition">
-        <div class="flex items-center gap-4">
-          <img src="https://via.placeholder.com/80x100" alt="Novel Cover" class="w-20 h-24 rounded-lg shadow-md" />
-          <div>
-            <h2 class="text-xl font-bold text-green-300">อบ.กับสก๊อย</h2>
-            <p class="text-gray-300 text-sm">• Novel</p>
+        <!-- Summary -->
+        <div
+          class="mt-8 p-5 bg-gradient-to-r from-indigo-900/70 to-purple-900/70 rounded-xl shadow-lg"
+        >
+          <div class="flex justify-between text-lg mb-3">
+            <span class="text-gray-300">Total Items:</span>
+            <span class="font-bold text-cyan-300">2</span>
           </div>
+          <div class="flex justify-between text-lg mb-3">
+            <span class="text-gray-300">Total Price:</span>
+            <span class="font-bold text-yellow-300">฿270</span>
+          </div>
+          <button
+            class="w-full mt-4 py-3 rounded-xl text-xl font-bold bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 hover:scale-105 transition-all shadow-lg"
+          >
+            Checkout 🚀
+          </button>
         </div>
-        <div class="flex items-center gap-4">
-          <span class="text-lg font-semibold text-yellow-300">฿150</span>
-          <button class="px-3 py-1 rounded-lg bg-rose-600 hover:bg-rose-700 transition">Delete</button>
-        </div>
-    </div>
-
-    <!-- Summary -->
-    <div class="mt-8 p-5 bg-gradient-to-r from-indigo-900/70 to-purple-900/70 rounded-xl shadow-lg">
-      <div class="flex justify-between text-lg mb-3">
-        <span class="text-gray-300">Total Items:</span>
-        <span class="font-bold text-cyan-300">2</span>
       </div>
-      <div class="flex justify-between text-lg mb-3">
-        <span class="text-gray-300">Total Price:</span>
-        <span class="font-bold text-yellow-300">฿270</span>
-      </div>
-      <button class="w-full mt-4 py-3 rounded-xl text-xl font-bold bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 hover:scale-105 transition-all shadow-lg">
-        Checkout 🚀
-      </button>
     </div>
-  </div>
-    </div>
-</body>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/script.js"></script>
+  </body>
 </html>
