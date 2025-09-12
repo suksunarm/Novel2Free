@@ -145,4 +145,50 @@ router.post("/add-novel-in-cart/:id", authMiddleware, async (req, res) => {
   }
 });
 
+router.delete("/cart/remove/:id", authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const cartItemId = req.params.id; // _id ของ cart_items
+
+    // ลบ item ออกจาก cart
+    await User.findByIdAndUpdate(
+      userId,
+      { $pull: { cart_items: { _id: cartItemId } } }
+    );
+
+    // ดึงข้อมูล cart ใหม่หลังลบ
+    const novelOfUser = await User.findById(userId).populate("cart_items.novel_id");
+
+    const cartItems = novelOfUser.cart_items;
+
+    // คำนวณราคาและจำนวนใหม่
+    const totalItems = cartItems.length;
+    const totalPrice = cartItems.reduce((sum, item) => sum + item.price, 0);
+
+    // render หน้า cart ใหม่
+    res.json({
+      pageTitle: "ตะกร้าสินค้า",
+      cartItems,
+      totalItems,
+      totalPrice,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server Error!");
+  }
+});
+
+// router.delete("/novel/:id", async (req, res) => {
+//   try {
+//     const novel = await Novel.findByIdAndDelete(req.params.id);
+//     console.log(novel);
+//     if (!novel) {
+//       return res.status(404).json({ msg: "Novel not found" });
+//     }
+//     res.json({ msg: "Delete Novel Success", novel });
+//   } catch (err) {
+//     res.status(500).json({ msg: "Delete Novel Failed", error: err.message });
+//   }
+// });
+
 module.exports = router;

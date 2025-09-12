@@ -404,23 +404,26 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-   //ตะกร้า
+  //ตะกร้า
   const addToCartBtn = document.getElementById("addToCartBtn");
 
   if (addToCartBtn) {
     addToCartBtn.addEventListener("click", async () => {
       const novelId = addToCartBtn.dataset.id;
-      console.log(novelId)
+      console.log(novelId);
 
       try {
-        const res = await fetch(`http://localhost:3000/add-novel-in-cart/${novelId}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include", // ส่ง cookie JWT ไปด้วย
-          body: JSON.stringify({ novelId }),
-        });
+        const res = await fetch(
+          `http://localhost:3000/add-novel-in-cart/${novelId}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include", // ส่ง cookie JWT ไปด้วย
+            body: JSON.stringify({ novelId }),
+          }
+        );
 
         const data = await res.json();
 
@@ -450,28 +453,74 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  if (true) {
-    document.querySelectorAll(".remove-btn").forEach(btn => {
-  btn.addEventListener("click", async (e) => {
-    e.preventDefault();
-    const cartItemId = btn.dataset.id;
+  const cartContainer = document.querySelector("#cart-container");
+  const cartItems = document.querySelector("#cart_items");
+  const cartSubPrice = document.querySelector("#cart_subPrice");
+  const cartPrice = document.querySelector("#cart_price");
 
-    try {
-      const res = await fetch(`/cart/remove/${cartItemId}`, {
-        method: "POST"
-      });
+  document.querySelectorAll(".deleteCart-btn").forEach((btn) => {
+    btn.addEventListener("click", async (e) => {
+      e.preventDefault();
+      const cartItemId = btn.dataset.id;
 
-      if(res.ok){
-        btn.closest(".cart-item").remove(); // ลบ DOM element
-        Swal.fire("ลบแล้ว!", "ไอเท็มถูกลบจากตะกร้า", "success");
+      try {
+        const res = await fetch(`/cart/remove/${cartItemId}`, {
+          method: "DELETE",
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          btn.closest(".cart-item").remove(); // ลบ DOM element
+          
+          cartItems.textContent = `${data.totalItems}`
+          cartSubPrice.textContent = `฿${data.totalPrice}`
+          cartPrice.textContent = `฿${data.totalPrice}`
+
+          if (data.totalItems === 0 && cartContainer) {
+            cartContainer.innerHTML = `
+              <div class="p-10 text-center">
+                <span class="text-6xl mb-4 block">🛒</span>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Your cart is empty</h2>
+                <p class="text-gray-600 mb-6">Looks like you haven't added any novel yet.</p>
+                <a href="/" class="inline-block bg-orange-500 text-white font-bold py-3 px-6 rounded-xl">Browse Novel</a>
+              </div>`;
+          }
+          
+          Swal.fire("ลบแล้ว!", "ไอเท็มถูกลบจากตะกร้า", "success");
+        }
+      } catch (err) {
+        console.error(err);
+        Swal.fire("เกิดข้อผิดพลาด", "ไม่สามารถลบไอเท็มได้", "error");
       }
-    } catch(err){
-      console.error(err);
-      Swal.fire("เกิดข้อผิดพลาด", "ไม่สามารถลบไอเท็มได้", "error");
-    }
+    });
   });
-});
-  }
+
+  // const deleteNovelFunction = async (novelId) => {
+  //   try {
+  //     const response = await fetch(`/admin/novel/${novelId}`, {
+  //       method: "DELETE",
+  //     });
+
+  //     if (response.ok) {
+  //       Swal.fire({
+  //         icon: "success",
+  //         title: "สำเร็จ",
+  //         text: "ลบนิยายสำเร็จ!",
+  //       });
+  //       location.reload();
+  //     } else {
+  //       const data = await response.json();
+  //       Swal.fire({
+  //         icon: "success",
+  //         title: "สำเร็จ",
+  //         text: `${data.msg}`,
+  //       });
+  //     }
+  //   } catch (err) {
+  //     console.error("เกิดข้อผิดพลาด ", err);
+  //   }
+  // };
+
 });
 
 async function addPoint(point) {
