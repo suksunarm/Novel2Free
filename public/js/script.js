@@ -11,13 +11,25 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       if (response.ok) {
-        alert("เข้าสู่ระบบเสร็จสิ้น");
+        Swal.fire({
+          icon: "success",
+          title: "สำเร็จ",
+          text: "เข้าสู่ระบบสำเร็จ!",
+          timer: 1000,
+          timerProgressBar: true,
+          showConfirmButton: false,
+        }).then(() => {
+          window.location.href = data.redirectPath;
+        });
         formSignin.reset();
         const data = await response.json();
         localStorage.setItem("token", data.token);
-        window.location.href = data.redirectPath;
       } else {
-        alert("เกิดข้อผิดพลาด ไม่สามารถเข้าสู่ระบบได้");
+        Swal.fire({
+          icon: "error",
+          title: "เกิดข้อผิดพลาด",
+          text: "อีเมลหรือรหัสผ่านไม่ถูกต้อง!",
+        });
       }
     } catch (err) {
       console.error("เกิดข้อผิดพลาด ", err);
@@ -35,7 +47,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const confirmPassword = document.getElementById("confirmPassword").value;
 
       if (password !== confirmPassword) {
-        alert("กรุณากรอกรหัสผ่านให้ตรงกัน");
+        Swal.fire({
+          icon: "error",
+          title: "เกิดข้อผิดพลาด",
+          text: "กรอกรหัสผ่านไม่ตรงกัน!",
+        });
       }
 
       if (password == confirmPassword) {
@@ -80,11 +96,19 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       if (response.ok) {
-        alert("เพิ่มนิยายเสร็จสิ้น");
+        Swal.fire({
+          icon: "success",
+          title: "สำเร็จ",
+          text: "เพิ่มนิยายสำเร็จ!",
+        });
         addNovel.reset();
       } else {
         const data = await response.json();
-        alert("เกิดข้อผิดพลาด ไม่สามารถเพิ่มนิยายได้ error : " + data.msg);
+        Swal.fire({
+          icon: "error",
+          title: "เกิดข้อผิดพลาด",
+          text: `${data.msg}`,
+        });
       }
     } catch (err) {
       console.error("เกิดข้อผิดพลาด ", err);
@@ -144,11 +168,19 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       if (response.ok) {
-        alert("สมัครสมาชิกเสร็จสิ้น");
+        Swal.fire({
+          icon: "success",
+          title: "สำเร็จ",
+          text: "สมัครสมาชิกสำเร็จ!",
+        });
         formSignup.reset();
       } else {
         const data = await response.json();
-        alert("เกิดข้อผิดพลาด ไม่สามารถสมัครสมาชิกได้ error : " + data.msg);
+        Swal.fire({
+          icon: "error",
+          title: "เกิดข้อผิดพลาด",
+          text: `${data.msg}`,
+        });
       }
     } catch (err) {
       console.error("เกิดข้อผิดพลาด ", err);
@@ -181,13 +213,21 @@ document.addEventListener("DOMContentLoaded", () => {
       );
 
       if (response.ok) {
-        alert("เพิ่มคูปองสำเร็จ!");
+        Swal.fire({
+          icon: "success",
+          title: "สำเร็จ",
+          text: "เพิ่มคูปองสำเร็จ!",
+        });
         addRedeemCode.reset();
         const data = await response.json();
         console.log(data.copon);
       } else {
         const data = await response.json();
-        alert("เกิดข้อผิดพลาด ไม่สามารถเพิ่ม Coupon ได้: " + data.msg);
+        Swal.fire({
+          icon: "success",
+          title: "สำเร็จ",
+          text: `${data.msg}`,
+        });
       }
     } catch (err) {
       console.error("เกิดข้อผิดพลาด ", err);
@@ -208,7 +248,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       signinBtn.classList.remove("hidden");
       userIcon.classList.add("hidden");
-      logoutBtn.classList.add("hidden")
+      logoutBtn.classList.add("hidden");
     }
   }
 
@@ -262,7 +302,11 @@ document.addEventListener("DOMContentLoaded", () => {
         // เก็บ novelId ไว้ใน form
         editForm.dataset.novelId = novelId;
       } catch (err) {
-        alert("ไม่สามารถดึงข้อมูลนิยายเพื่อแก้ไขได้");
+        Swal.fire({
+          icon: "error",
+          title: "เกิดข้อผิดพลาด",
+          text: "ไม่สามารถดึงข้อมูลนิยายเพื่อแก้ไขได้!",
+        });
         console.error(err);
       }
     });
@@ -279,12 +323,20 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       if (response.ok) {
-        alert("แก้ไขนิยายเสร็จสิ้น");
+        Swal.fire({
+          icon: "success",
+          title: "สำเร็จ",
+          text: "แก้ไขนิยายสำเร็จ!",
+        });
         editModal.classList.add("hidden");
         location.reload();
       } else {
         const data = await response.json();
-        alert("เกิดข้อผิดพลาด ไม่สามารถแก้ไขนิยายได้ error : " + data.msg);
+        Swal.fire({
+          icon: "success",
+          title: "สำเร็จ",
+          text: `${data.msg}`,
+        });
       }
     } catch (err) {
       console.error("เกิดข้อผิดพลาด ", err);
@@ -317,11 +369,19 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       if (response.ok) {
-        alert("ลบนิยายเสร็จสิ้น");
+        Swal.fire({
+          icon: "success",
+          title: "สำเร็จ",
+          text: "ลบนิยายสำเร็จ!",
+        });
         location.reload();
       } else {
         const data = await response.json();
-        alert("เกิดข้อผิดพลาด ไม่สามารถลบนิยายได้ error : " + data.msg);
+        Swal.fire({
+          icon: "success",
+          title: "สำเร็จ",
+          text: `${data.msg}`,
+        });
       }
     } catch (err) {
       console.error("เกิดข้อผิดพลาด ", err);
@@ -344,33 +404,107 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-});
+   //ตะกร้า
+  const addToCartBtn = document.getElementById("addToCartBtn");
 
-async function addPoint(point){
-    try {
-      const res = await fetch(
-        "http://localhost:3000/addPoint",
-        {
+  if (addToCartBtn) {
+    addToCartBtn.addEventListener("click", async () => {
+      const novelId = addToCartBtn.dataset.id;
+      console.log(novelId)
+
+      try {
+        const res = await fetch(`http://localhost:3000/add-novel-in-cart/${novelId}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ point }),
+          credentials: "include", // ส่ง cookie JWT ไปด้วย
+          body: JSON.stringify({ novelId }),
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          Swal.fire({
+            icon: "success",
+            title: "เพิ่มเข้าตะกร้าเรียบร้อย!",
+            text: data.msg,
+            confirmButtonText: "ตกลง",
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "ผิดพลาด",
+            text: data.msg || "ไม่สามารถเพิ่มเข้าตะกร้าได้",
+            confirmButtonText: "ตกลง",
+          });
+        }
+      } catch (err) {
+        Swal.fire({
+          icon: "error",
+          title: "เกิดข้อผิดพลาด",
+          text: err.message,
+          confirmButtonText: "ตกลง",
+        });
+      }
+    });
+  }
+
+  if (true) {
+    document.querySelectorAll(".remove-btn").forEach(btn => {
+  btn.addEventListener("click", async (e) => {
+    e.preventDefault();
+    const cartItemId = btn.dataset.id;
+
+    try {
+      const res = await fetch(`/cart/remove/${cartItemId}`, {
+        method: "POST"
       });
 
-      const data = await res.json();
-
-      if (res.ok) {
-        // อัปเดต DOM แบบเรียลไทม์ ไม่ต้อง reload
-        const pointDisplay = document.getElementById("pointValue");
-        if (pointDisplay) {
-          pointDisplay.textContent = "My Point : " + data.points;
-        }
-        alert(`${data.msg} +${point} Points`);
-      } else {
-        alert(data.msg || "เกิดข้อผิดพลาด");
+      if(res.ok){
+        btn.closest(".cart-item").remove(); // ลบ DOM element
+        Swal.fire("ลบแล้ว!", "ไอเท็มถูกลบจากตะกร้า", "success");
       }
-    } catch(err) {
-      console.error("เติมพอยท์ล้มเหลว ", err);
+    } catch(err){
+      console.error(err);
+      Swal.fire("เกิดข้อผิดพลาด", "ไม่สามารถลบไอเท็มได้", "error");
     }
+  });
+});
   }
+});
+
+async function addPoint(point) {
+  try {
+    const res = await fetch("http://localhost:3000/addPoint", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ point }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      // อัปเดต DOM แบบเรียลไทม์ ไม่ต้อง reload
+      const pointDisplay = document.getElementById("pointValue");
+      if (pointDisplay) {
+        pointDisplay.textContent = "My Point : " + data.points;
+      }
+      Swal.fire({
+        icon: "success",
+        title: "สำเร็จ",
+        text: `${data.msg} +${point} Points`,
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "เกิดข้อผิดพลาด",
+        text: `${data.msg}`,
+      });
+    }
+  } catch (err) {
+    console.error("เติมพอยท์ล้มเหลว ", err);
+  }
+}
