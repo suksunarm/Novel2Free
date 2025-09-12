@@ -403,6 +403,75 @@ document.addEventListener("DOMContentLoaded", () => {
       editModal.classList.add("hidden");
     });
   }
+
+   //ตะกร้า
+  const addToCartBtn = document.getElementById("addToCartBtn");
+
+  if (addToCartBtn) {
+    addToCartBtn.addEventListener("click", async () => {
+      const novelId = addToCartBtn.dataset.id;
+      console.log(novelId)
+
+      try {
+        const res = await fetch(`http://localhost:3000/add-novel-in-cart/${novelId}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include", // ส่ง cookie JWT ไปด้วย
+          body: JSON.stringify({ novelId }),
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          Swal.fire({
+            icon: "success",
+            title: "เพิ่มเข้าตะกร้าเรียบร้อย!",
+            text: data.msg,
+            confirmButtonText: "ตกลง",
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "ผิดพลาด",
+            text: data.msg || "ไม่สามารถเพิ่มเข้าตะกร้าได้",
+            confirmButtonText: "ตกลง",
+          });
+        }
+      } catch (err) {
+        Swal.fire({
+          icon: "error",
+          title: "เกิดข้อผิดพลาด",
+          text: err.message,
+          confirmButtonText: "ตกลง",
+        });
+      }
+    });
+  }
+
+  if (true) {
+    document.querySelectorAll(".remove-btn").forEach(btn => {
+  btn.addEventListener("click", async (e) => {
+    e.preventDefault();
+    const cartItemId = btn.dataset.id;
+
+    try {
+      const res = await fetch(`/cart/remove/${cartItemId}`, {
+        method: "POST"
+      });
+
+      if(res.ok){
+        btn.closest(".cart-item").remove(); // ลบ DOM element
+        Swal.fire("ลบแล้ว!", "ไอเท็มถูกลบจากตะกร้า", "success");
+      }
+    } catch(err){
+      console.error(err);
+      Swal.fire("เกิดข้อผิดพลาด", "ไม่สามารถลบไอเท็มได้", "error");
+    }
+  });
+});
+  }
 });
 
 async function addPoint(point) {
@@ -424,16 +493,16 @@ async function addPoint(point) {
         pointDisplay.textContent = "My Point : " + data.points;
       }
       Swal.fire({
-          icon: "success",
-          title: "สำเร็จ",
-          text: `${data.msg} +${point} Points`,
-        });
+        icon: "success",
+        title: "สำเร็จ",
+        text: `${data.msg} +${point} Points`,
+      });
     } else {
       Swal.fire({
-          icon: "error",
-          title: "เกิดข้อผิดพลาด",
-          text: `${data.msg}`,
-        });
+        icon: "error",
+        title: "เกิดข้อผิดพลาด",
+        text: `${data.msg}`,
+      });
     }
   } catch (err) {
     console.error("เติมพอยท์ล้มเหลว ", err);
