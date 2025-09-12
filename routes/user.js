@@ -52,6 +52,7 @@ router.post("/addPoint", authMiddleware , async (req, res) => {
   catch(err) {
     res.status(500).json({ msg: "เติมพอยท์ล้มเหลว", error: err.message });
   }
+});
 
 router.get("/signup", (req, res) => {
   res.render("sign_up", { pageTitle: "สมัครสมาชิก" });

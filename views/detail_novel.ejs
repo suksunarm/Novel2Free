@@ -8,17 +8,17 @@
   </head>
   <body class="flex flex-col bg-[url('/assets/bg.png')] min-h-screen bg-center bg-cover">
     <!-- Wrapper -->
-    <div class="max-w-5xl mx-auto p-6">
+    <div class="flex flex-col">
       <!-- Novel Header -->
-      <div class="bg-purple-800/30 backdrop-blur-md p-6 rounded-2xl shadow-lg flex gap-6">
+      <div class="justify-center bg-black/20 backdrop-blur-md rounded-2xl shadow-lg flex gap-6 p-5">
         <!-- Novel Cover -->
         <img src="<%= novel.image_url %>" alt="Novel Cover"
-             class="w-40 h-56 object-cover rounded-xl shadow-md border border-purple-700">
+             class="w-60 h-80 object-cover rounded-xl shadow-md border border-purple-700">
         <!-- Novel Info -->
         <div class="flex flex-col justify-between">
-          <div>
-            <h1 class="text-3xl font-bold text-purple-300"><%= novel.title %></h1>
-            <p class="text-lg text-gray-300 mt-2">ราคา: <span class="text-purple-400 font-semibold"><%= novel.price %> บาท</span></p>
+          <div class="py-5">
+            <h1 class="text-5xl font-bold text-purple-300"><%= novel.title %></h1>
+            <p class="text-xl text-gray-300 mt-2">ราคา: <span class="text-purple-400 font-semibold"><%= novel.price %> บาท</span></p>
           </div>
           <button class="mt-4 bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-xl font-semibold transition">
             เพิ่มเข้าตะกร้า
