@@ -471,10 +471,10 @@ document.addEventListener("DOMContentLoaded", () => {
         if (res.ok) {
           const data = await res.json();
           btn.closest(".cart-item").remove(); // ลบ DOM element
-          
-          cartItems.textContent = `${data.totalItems}`
-          cartSubPrice.textContent = `฿${data.totalPrice}`
-          cartPrice.textContent = `฿${data.totalPrice}`
+
+          cartItems.textContent = `${data.totalItems}`;
+          cartSubPrice.textContent = `฿${data.totalPrice}`;
+          cartPrice.textContent = `฿${data.totalPrice}`;
 
           if (data.totalItems === 0 && cartContainer) {
             cartContainer.innerHTML = `
@@ -482,10 +482,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 <span class="text-6xl mb-4 block">🛒</span>
                 <h2 class="text-2xl font-bold text-gray-800 mb-2">Your cart is empty</h2>
                 <p class="text-gray-600 mb-6">Looks like you haven't added any novel yet.</p>
-                <a href="/" class="inline-block bg-orange-500 text-white font-bold py-3 px-6 rounded-xl">Browse Novel</a>
+                <a href="/" class="inline-block bg-gradient-to-r from-purple-400 to-pink-500 hover:from-pink-500 hover:to-purple-400 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 ease-in-out shadow-lg hover:shadow-2xl hover:scale-105">
+                  Browse Novel
+                </a>
               </div>`;
           }
-          
+
           Swal.fire("ลบแล้ว!", "ไอเท็มถูกลบจากตะกร้า", "success");
         }
       } catch (err) {
@@ -494,33 +496,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
-
-  // const deleteNovelFunction = async (novelId) => {
-  //   try {
-  //     const response = await fetch(`/admin/novel/${novelId}`, {
-  //       method: "DELETE",
-  //     });
-
-  //     if (response.ok) {
-  //       Swal.fire({
-  //         icon: "success",
-  //         title: "สำเร็จ",
-  //         text: "ลบนิยายสำเร็จ!",
-  //       });
-  //       location.reload();
-  //     } else {
-  //       const data = await response.json();
-  //       Swal.fire({
-  //         icon: "success",
-  //         title: "สำเร็จ",
-  //         text: `${data.msg}`,
-  //       });
-  //     }
-  //   } catch (err) {
-  //     console.error("เกิดข้อผิดพลาด ", err);
-  //   }
-  // };
-
 });
 
 async function addPoint(point) {
