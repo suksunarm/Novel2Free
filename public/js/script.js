@@ -436,12 +436,14 @@ document.addEventListener("DOMContentLoaded", () => {
             title: "เพิ่มเข้าตะกร้าเรียบร้อย!",
             text: data.msg,
             confirmButtonText: "ตกลง",
-          });
+          }).then(() => {
+          window.location.href = "/";
+        });
         } else {
           Swal.fire({
             icon: "error",
             title: "ผิดพลาด",
-            text: data.msg || "ไม่สามารถเพิ่มเข้าตะกร้าได้",
+            text: data.msg,
             confirmButtonText: "ตกลง",
           });
         }
@@ -449,7 +451,7 @@ document.addEventListener("DOMContentLoaded", () => {
         Swal.fire({
           icon: "error",
           title: "เกิดข้อผิดพลาด",
-          text: err.message,
+          text: err.msg,
           confirmButtonText: "ตกลง",
         });
       }

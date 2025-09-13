@@ -127,7 +127,15 @@ router.post("/add-novel-in-cart/:id", authMiddleware, async (req, res) => {
     // หา novel
     const novel = await Novel.findById(novelId);
     if (!novel) {
-      return res.status(404).json({ message: "Novel not found" });
+      return res.status(404).json({ msg: "Novel not found" });
+    }
+
+    // เช็กว่ามี novel_id นี้ใน cart_items แล้วหรือยัง
+    const alreadyInCart = user.cart_items.some(
+      (item) => item.novel_id.toString() === novelId
+    );
+    if (alreadyInCart) {
+      return res.status(400).json({ msg: "นิยายนี้อยู่ในตะกร้าแล้ว" });
     }
 
     // อัปเดตตะกร้า
@@ -138,10 +146,10 @@ router.post("/add-novel-in-cart/:id", authMiddleware, async (req, res) => {
 
     await user.save();
 
-    res.json({ message: "เพิ่มนิยายเข้าตะกร้าแล้ว ✅" });
+    res.json({ msg: "เพิ่มนิยายเข้าตะกร้าแล้ว ✅" });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Server Error" });
+    res.status(500).json({ msg: "Server Error" });
   }
 });
 
