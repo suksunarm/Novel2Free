@@ -18,6 +18,25 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/my-novel", authMiddleware, async (req, res) => {
+  try {
+    const userFromCookies = req.user;
+    const user = await User.findById(userFromCookies._id).populate(
+      "myNovel.novel_id"
+    );
+    if (userFromCookies.role !== role) {
+      return res.redirect("/signin");
+    }
+    // ดึงข้อมูลนิยายที่ซื้อแล้ว
+    const myNovels = user.myNovel.map((item) => item.novel_id);
+    console.log(myNovels);
+
+    res.render("my_novel", { pageTitle: "นิยายของฉัน", myNovels });
+  } catch (err) {
+    res.status(500).send("Failed to fetch novels: " + err.message);
+  }
+});
+
 router.get("/cart", authMiddleware, async (req, res) => {
   try {
     const user = req.user;
@@ -222,8 +241,15 @@ router.post("/cart/checkout", authMiddleware, async (req, res) => {
       alreadyBoughtIds.includes(item.novel_id._id.toString())
     );
     if (duplicate) {
-      return res.status(400).json({ msg: "คุณมีสินค้าบางประเภทในตะกร้านี้อยู่แล้ว" });
+      return res
+        .status(400)
+        .json({ msg: "คุณมีสินค้าบางประเภทในตะกร้านี้อยู่แล้ว" });
     }
+
+    // เพิ่มนิยายที่ซื้อเข้า myNovel
+    user.cart_items.forEach((item) => {
+      user.myNovel.push({ novel_id: item.novel_id._id });
+    });
 
     // ตัด point
     user.points -= totalPrice;

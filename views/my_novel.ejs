@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>My Novels</title>
+  </head>
+  <body class="text-white">
+    <div
+      class="flex flex-col bg-[url('/assets/bg.png')] min-h-screen bg-center bg-cover"
+    >
+      <!-- Navbar -->
+      <nav
+        class="flex items-center justify-between px-6 py-4 bg-gray-900 shadow-lg"
+      >
+        <h1
+          class="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent"
+        >
+          My Novels
+        </h1>
+        <a
+          href="/"
+          class="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg font-semibold hover:opacity-80"
+        >
+          + Buy More
+        </a>
+      </nav>
+
+      <main class="px-6 py-10 max-w-6xl mx-auto">
+        <h2 class="text-3xl font-bold mb-6">My Collection 📚</h2>
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <% if (myNovels.length === 0) { %>
+          <div class="text-white text-xl">ยังไม่มีนิยายในคลัง</div>
+          <% } else { %> <% myNovels.forEach(novel => { %>
+          <div
+            class="bg-gray-900 rounded-2xl overflow-hidden shadow-lg hover:scale-105 transition"
+          >
+            <img
+              src="<%= novel.image_url %>"
+              alt="Novel Cover"
+              class="w-full h-48 object-cover"
+            />
+            <div class="p-4 space-y-2">
+              <h3 class="text-xl font-bold"><%= novel.title %></h3>
+              <div class="flex justify-between items-center pt-2">
+                <span class="text-pink-400 font-bold"><%= novel.price %>฿</span>
+              </div>
+            </div>
+          </div>
+          <% }) %> <% } %>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
