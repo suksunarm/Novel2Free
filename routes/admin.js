@@ -52,12 +52,13 @@ router.get("/novel/:id", authMiddleware ,async (req, res) => {
 
 router.post("/addNovel", async (req, res) => {
   try {
-    const { nameNovel, contentNovel, imgNovel, priceNovel } = req.body;
+    const { nameNovel, contentNovel, imgNovel, priceNovel , categoryNovel } = req.body;
     const novel = new Novel({
       title: nameNovel,
       content: contentNovel,
       image_url: imgNovel,
       price: priceNovel,
+      category: categoryNovel,
     });
 
     await novel.save();
@@ -68,6 +69,7 @@ router.post("/addNovel", async (req, res) => {
         content: novel.content,
         image_url: novel.image_url,
         price: novel.price,
+        category: novel.categoryNovel
       },
     });
   } catch (err) {

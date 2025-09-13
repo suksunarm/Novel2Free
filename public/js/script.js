@@ -124,6 +124,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const contentNovel = document.getElementById("contentNovel").value;
       const priceNovel = parseInt(document.getElementById("priceNovel").value);
       const imgNovel = document.getElementById("imageNovel").value;
+      const categoryNovel = document.getElementById("categoryNovel").value;
+      console.log(categoryNovel);
 
       //เหลือ imgNovel
       const novel = {
@@ -131,6 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
         contentNovel,
         imgNovel,
         priceNovel,
+        categoryNovel,
       };
       addNovelFunction(novel);
     });
@@ -471,10 +474,10 @@ document.addEventListener("DOMContentLoaded", () => {
         if (res.ok) {
           const data = await res.json();
           btn.closest(".cart-item").remove(); // ลบ DOM element
-          
-          cartItems.textContent = `${data.totalItems}`
-          cartSubPrice.textContent = `฿${data.totalPrice}`
-          cartPrice.textContent = `฿${data.totalPrice}`
+
+          cartItems.textContent = `${data.totalItems}`;
+          cartSubPrice.textContent = `฿${data.totalPrice}`;
+          cartPrice.textContent = `฿${data.totalPrice}`;
 
           if (data.totalItems === 0 && cartContainer) {
             cartContainer.innerHTML = `
@@ -485,7 +488,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <a href="/" class="inline-block bg-orange-500 text-white font-bold py-3 px-6 rounded-xl">Browse Novel</a>
               </div>`;
           }
-          
+
           Swal.fire("ลบแล้ว!", "ไอเท็มถูกลบจากตะกร้า", "success");
         }
       } catch (err) {
@@ -520,7 +523,6 @@ document.addEventListener("DOMContentLoaded", () => {
   //     console.error("เกิดข้อผิดพลาด ", err);
   //   }
   // };
-
 });
 
 async function addPoint(point) {
