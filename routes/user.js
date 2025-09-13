@@ -31,12 +31,12 @@ router.get("/cart", authMiddleware, async (req, res) => {
     }
 
     const cartItems = novelOfUser.cart_items;
-    console.log(cartItems)
+    console.log(cartItems);
 
     //คำนวณราคาทั้งหมดที่ user จะต้องจ่าย
     const totalItems = cartItems.length; //ดูว่าข้อมูลในตะกร้ามีกี่ชิ้น
     const totalPrice = cartItems.reduce((sum, item) => {
-      return sum + item.price 
+      return sum + item.price;
     }, 0);
 
     res.render("cart", {
@@ -159,13 +159,14 @@ router.delete("/cart/remove/:id", authMiddleware, async (req, res) => {
     const cartItemId = req.params.id; // _id ของ cart_items
 
     // ลบ item ออกจาก cart
-    await User.findByIdAndUpdate(
-      userId,
-      { $pull: { cart_items: { _id: cartItemId } } }
-    );
+    await User.findByIdAndUpdate(userId, {
+      $pull: { cart_items: { _id: cartItemId } },
+    });
 
     // ดึงข้อมูล cart ใหม่หลังลบ
-    const novelOfUser = await User.findById(userId).populate("cart_items.novel_id");
+    const novelOfUser = await User.findById(userId).populate(
+      "cart_items.novel_id"
+    );
 
     const cartItems = novelOfUser.cart_items;
 
@@ -198,5 +199,45 @@ router.delete("/cart/remove/:id", authMiddleware, async (req, res) => {
 //     res.status(500).json({ msg: "Delete Novel Failed", error: err.message });
 //   }
 // });
+
+router.post("/cart/checkout", authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const user = await User.findById(userId).populate("cart_items.novel_id");
+
+    // คำนวณราคารวม
+    const totalPrice = user.cart_items.reduce(
+      (sum, item) => sum + item.price,
+      0
+    );
+
+    // เช็ก point
+    if (user.points < totalPrice) {
+      return res.status(400).json({ msg: "พอยท์ของคุณไม่เพียงพอ" });
+    }
+
+    // เช็กว่ามี novel_id ที่ซ้ำกับ myNovel หรือไม่
+    const alreadyBoughtIds = user.myNovel.map((n) => n.novel_id.toString());
+    const duplicate = user.cart_items.find((item) =>
+      alreadyBoughtIds.includes(item.novel_id._id.toString())
+    );
+    if (duplicate) {
+      return res.status(400).json({ msg: "คุณมีสินค้าบางประเภทในตะกร้านี้อยู่แล้ว" });
+    }
+
+    // ตัด point
+    user.points -= totalPrice;
+
+    // เคลียร์ตะกร้า
+    user.cart_items = [];
+
+    await user.save();
+
+    res.json({ msg: "ซื้อสำเร็จ! ได้รับนิยายในคลังแล้ว", points: user.points });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: "เกิดข้อผิดพลาด", error: err.message });
+  }
+});
 
 module.exports = router;

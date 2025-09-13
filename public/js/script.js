@@ -437,8 +437,8 @@ document.addEventListener("DOMContentLoaded", () => {
             text: data.msg,
             confirmButtonText: "ตกลง",
           }).then(() => {
-          window.location.href = "/";
-        });
+            window.location.href = "/";
+          });
         } else {
           Swal.fire({
             icon: "error",
@@ -525,6 +525,46 @@ document.addEventListener("DOMContentLoaded", () => {
   //     console.error("เกิดข้อผิดพลาด ", err);
   //   }
   // };
+  const checkoutBtn = document.getElementById("checkoutBtn");
+  if (checkoutBtn) {
+    checkoutBtn.addEventListener("click", async () => {
+      try {
+        const res = await fetch("/cart/checkout", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include", // ส่ง cookie JWT ไปด้วย
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          Swal.fire({
+            icon: "success",
+            title: "ซื้อสำเร็จ!",
+            text: data.msg,
+            confirmButtonText: "ตกลง",
+          }).then(() => {
+            window.location.reload(); // รีเฟรชหน้า cart
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "ผิดพลาด",
+            text: data.msg || "ซื้อไม่สำเร็จ",
+            confirmButtonText: "ตกลง",
+          });
+        }
+      } catch (err) {
+        Swal.fire({
+          icon: "error",
+          title: "เกิดข้อผิดพลาด",
+          text: err.message,
+          confirmButtonText: "ตกลง",
+        });
+      }
+    });
+  }
 });
 
 async function addPoint(point) {
