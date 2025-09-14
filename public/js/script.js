@@ -1,4 +1,19 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const loginModal = document.getElementById("loginModal");
+  const closeBtn = document.getElementById("closeLoginModal");
+  const signinBtn = document.getElementById("signinBtn");
+
+  if (signinBtn) {
+    signinBtn.addEventListener("click", () => {
+      loginModal.classList.remove("hidden");
+    });
+  }
+
+  if (closeBtn) {
+    closeBtn.addEventListener("click", () => {
+      loginModal.classList.add("hidden");
+    })
+  }
   //function Signin
   const signInFunction = async (data) => {
     try {
@@ -237,11 +252,39 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  const userIcon = document.getElementById("userIcon");
+  const userDropdown = document.getElementById("userDropdown");
+  const logoutBtn = document.getElementById("logout");
+
+  // Toggle dropdown เมื่อคลิกที่ user icon
+  if (userIcon && userDropdown) {
+    userIcon.addEventListener("click", (e) => {
+      e.stopPropagation();
+      userDropdown.classList.toggle("hidden");
+    });
+
+    // ซ่อน dropdown เมื่อคลิกที่อื่น
+    document.addEventListener("click", () => {
+      userDropdown.classList.add("hidden");
+    });
+
+    // ป้องกัน dropdown ปิดเมื่อคลิกข้างใน
+    userDropdown.addEventListener("click", (e) => {
+      e.stopPropagation();
+    });
+  }
+
+  // ออกจากระบบจาก dropdown
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", async () => {
+      localStorage.removeItem("token");
+      await logoutFunction();
+      window.location.href = "/";
+    });
+  }
+
   // LOGOUT & Check Token
   const token = localStorage.getItem("token");
-  const signinBtn = document.getElementById("signinBtn");
-  const userIcon = document.getElementById("userIcon");
-  const logoutBtn = document.getElementById("logout");
   const logoutAdmin = document.getElementById("logoutAdmin");
 
   if (signinBtn && userIcon) {
@@ -501,7 +544,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
-  
+
   const checkoutBtn = document.getElementById("checkoutBtn");
   if (checkoutBtn) {
     checkoutBtn.addEventListener("click", async () => {

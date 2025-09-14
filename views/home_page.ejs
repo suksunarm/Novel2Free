@@ -11,23 +11,31 @@
       class="flex flex-col bg-[url('/assets/bg.png')] min-h-screen bg-center bg-cover"
     >
       <!-- Navbar -->
-      <div
-        class="flex text-white justify-between items-center p-5 px-10 bg-black/50 backdrop-blur-md shadow-xl mb-5 rounded-b-xl"
+      <nav
+        class="sticky top-0 z-50 flex items-center justify-between px-6 py-4 bg-gray-900 shadow-lg"
       >
-        <div class="font-extrabold text-4xl">Novel2Free</div>
-        <div class="flex gap-3 items-center">
+        <!-- Logo -->
+        <a
+          href="/"
+          class="text-3xl font-extrabold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent"
+        >
+          Novel2Free
+        </a>
+
+        <!-- Right Menu -->
+        <div class="flex text-white items-center gap-4">
           <!-- Cart Button -->
           <a
             href="/cart"
-            class="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#6E5A8A]/70 hover:bg-[#8164FF]/80 transform transition-all duration-300 hover:scale-105 shadow-lg"
+            class="flex items-center min-h-10 gap-2 px-4 py-2 rounded-lg bg-[#5D4F71] hover:bg-[#5D4F71]/30 transition duration-300"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
+              width="22"
+              height="22"
               fill="currentColor"
               viewBox="0 0 24 24"
-              class="w-6 h-6"
+              class="w-5 h-5"
             >
               <circle cx="8" cy="21" r="1" />
               <circle cx="19" cy="21" r="1" />
@@ -35,76 +43,93 @@
                 d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"
               />
             </svg>
-            <span>ตะกร้า</span>
+            <span class="text-sm font-medium">ตะกร้า</span>
           </a>
 
           <!-- My Novels -->
           <a
             href="/my-novel"
-            class="px-4 py-2 rounded-xl bg-[#6E5A8A]/70 hover:bg-[#8164FF]/80 transition-all duration-300 transform hover:scale-105 shadow-lg"
+            class="flex items-center min-h-10 px-4 py-2 rounded-lg bg-[#5D4F71] hover:bg-[#5D4F71]/30 transition duration-300 text-sm font-medium"
           >
-            <span class="font-semibold text-white">นิยายของฉัน</span>
+            นิยายของฉัน
           </a>
 
           <!-- Points -->
+          <% if (user) { %>
           <a
             href="/point"
-            class="flex items-center gap-1 px-4 py-2 rounded-xl bg-[#6E5A8A]/70 hover:bg-[#8164FF]/80 transition-all duration-300 transform hover:scale-105 shadow-lg"
+            class="flex items-center gap-1 px-4 py-2 rounded-lg bg-gradient-to-r from-yellow-600 to-pink-500 text-black font-semibold hover:opacity-90 transition duration-300"
           >
-            <span class="font-semibold text-white">25023</span>
+            <span class="font-bold text-white"><%= user.points %></span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
+              width="18"
+              height="18"
               viewBox="0 0 24 24"
               fill="currentColor"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="text-yellow-400 w-5 h-5"
+              class="w-5 h-5 text-yellow-200"
             >
               <path
                 d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
               />
             </svg>
           </a>
+          <% } %>
 
           <!-- Sign In -->
           <a
             href="/signin"
             id="signinBtn"
-            class="px-4 py-2 rounded-xl bg-[#6E5A8A]/70 hover:bg-[#8164FF]/80 text-white font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg"
+            class="px-4 py-2 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold hover:opacity-90 transition duration-300"
           >
             เข้าสู่ระบบ
           </a>
 
-          <!-- User Icon -->
-          <div
-            id="userIcon"
-            class="p-2 rounded-xl bg-[#6E5A8A]/70 flex items-center hidden hover:brightness-125 transition-all duration-300"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="28"
-              height="28"
-              fill="currentColor"
-              viewBox="0 0 24 24"
+          <div class="relative">
+            <div
+              id="userIcon"
+              class="min-h-10 p-2 rounded-lg bg-[#5D4F71] hover:bg-[#6a5b85] transition duration-300 cursor-pointer"
             >
-              <circle cx="12" cy="8" r="4" />
-              <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
-            </svg>
-          </div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="26"
+                height="26"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <circle cx="12" cy="8" r="4" />
+                <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
+              </svg>
+            </div>
 
-          <!-- Logout -->
-          <button
-            id="logout"
-            class="px-4 py-2 rounded-xl bg-gradient-to-r from-[#8164FF] to-[#CB52FF] hover:from-[#9277FF] hover:to-[#D564FF] text-white font-bold transition-all duration-300 transform hover:scale-105 shadow-lg"
-          >
-            ออกจากระบบ
-          </button>
+            <!-- Dropdown menu -->
+            <div
+              id="userDropdown"
+              class="absolute right-0 mt-2 w-44 bg-gray-900 rounded-xl shadow-lg border border-white/10 py-2 z-50 hidden"
+            >
+              <button
+                id="logout"
+                class="cursor-pointer flex items-center gap-2 w-full text-left px-4 py-2 text-gray-200 hover:bg-red-600 hover:text-white font-medium rounded-lg transition duration-300"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M16 13v-2H7V8l-5 4 5 4v-3h9z" />
+                  <path
+                    d="M20 3h-8v2h8v14h-8v2h8a2 2 0 002-2V5a2 2 0 00-2-2z"
+                  />
+                </svg>
+                ออกจากระบบ
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
+      </nav>
+
       <!-- Content -->
       <div class="grid grid-cols-6 px-30 place-items-center gap-y-5">
         <% novels.forEach(novel => { %>

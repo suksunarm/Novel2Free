@@ -10,12 +10,19 @@ const authMiddleware = require("../auth/auth");
 const role = "user";
 
 router.get("/", async (req, res) => {
-  try {
-    const novels = await Novel.find();
-    res.render("home_page", { pageTitle: "หน้าหลัก", novels });
-  } catch (err) {
-    res.status(500).send("Failed to fetch novels: " + err.message);
+  let user;
+  const token = req.cookies.token;
+  // เพิิ่มเช็กใน token ในหน้านี้เท่านั้น ไม่ต้องใช้ Middleware 
+  if (token) {
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      user = await User.findById(decoded.id);
+    } catch (err) {
+      res.status(500).send("Failed to fetch novels and point: " + err.message);
+    }
   }
+  const novels = await Novel.find();
+  res.render("home_page", { pageTitle: "หน้าหลัก", novels , user });
 });
 
 router.get("/my-novel", authMiddleware, async (req, res) => {
