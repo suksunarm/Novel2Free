@@ -12,33 +12,71 @@
     <!-- Wrapper -->
     <div class="flex flex-col">
       <!-- Novel Header -->
-      <div class="justify-center bg-black/20 backdrop-blur-md rounded-2xl shadow-lg flex gap-6 p-5">
+      <div
+        class="flex justify-center bg-black/20 backdrop-blur-sm rounded-2xl h-fit shadow-lg gap-6 p-5 gap-x-10"
+      >
         <!-- Novel Cover -->
-        <img src="<%= novel.image_url %>" alt="Novel Cover"
-             class="w-60 h-80 object-cover rounded-xl shadow-md border border-purple-700">
+        <img
+          src="<%= novel.image_url %>"
+          alt="Novel Cover"
+          class="w-[350px] h-[450px] object-cover rounded-md shadow-md border border-purple-700"
+        />
         <!-- Novel Info -->
-        <div class="flex flex-col justify-between">
+        <div class="flex flex-col justify-between py-10">
           <div class="py-5">
-            <h1 class="text-5xl font-bold text-purple-300"><%= novel.title %></h1>
-            <p class="text-xl text-gray-300 mt-2">ราคา: <span class="text-purple-400 font-semibold"><%= novel.price %> บาท</span></p>
+            <h1
+              class="text-5xl font-bold text-purple-300 max-w-[400px] truncate"
+            >
+              <%= novel.title %>
+            </h1>
+            <p class="text-2xl text-gray-300 mt-2 flex items-center">
+              ราคา : 
+              <span class="text-purple-400 font-semibold ml-1">
+                <%= novel.price %>
+              </span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star-icon lucide-star text-yellow-500 ml-1"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg>     
+            </p>
           </div>
-          <button
-            id="addToCartBtn"
-            type="button"
-            data-id="<%= novel._id %>"
-            class="mt-4 bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-xl font-semibold transition"
-          >
-            เพิ่มเข้าตะกร้า
-          </button>
+          <div class="flex justify-start items-center gap-2">
+            <button
+              data-id="<%= novel._id %>"
+              class="group rounded-full border border-white text-white w-fit p-2"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-heart transition-colors duration-300 group-hover:fill-red-500 group-hover:stroke-red-500"
+              >
+                <path
+                  d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"
+                />
+              </svg>
+            </button>
+            <button
+              id="addToCartBtn"
+              type="button"
+              data-id="<%= novel._id %>"
+              class="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-xl font-semibold transition text-white text-xl"
+            >
+              เพิ่มเข้าตะกร้า
+            </button>
+          </div>
         </div>
       </div>
 
       <!-- Novel Content -->
       <div
-        class="mt-8 bg-gray-900/70 backdrop-blur-sm p-6 rounded-2xl shadow-lg leading-relaxed text-gray-200"
+        class="flex flex-col w-fit backdrop-blur-xl p-10 px-60 rounded-2xl shadow-lg leading-relaxed text-gray-200"
       >
-        <h2 class="text-2xl font-semibold text-purple-400 mb-4">เนื้อหา</h2>
-        <p class="whitespace-pre-line"><%= novel.content %></p>
+        <h2 class="text-4xl font-semibold text-purple-400 mb-4">เนื้อหา</h2>
+        <p class="whitespace-pre-line px-10 text-xl"><%= novel.content %></p>
       </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

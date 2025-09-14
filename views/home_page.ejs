@@ -6,7 +6,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <title><%= pageTitle %></title>
   </head>
-  <body>
+  <body class="flex flex-col min-h-screen">
     <div
       class="flex flex-col bg-[url('/assets/bg.png')] min-h-screen bg-center bg-cover"
     >
@@ -110,7 +110,7 @@
         <% novels.forEach(novel => { %>
         <a
           href="/detail_novel/<%= novel._id %>"
-          class="text-white bg-white/10 w-[200px] rounded-xl overflow-hidden shadow-2xl"
+          class="text-white bg-white/10 w-[200px] rounded-xl overflow-hidden shadow-2xl transition-all duration-300 ease-in-out hover:scale-105 hover:bg-white/20 hover:shadow-2xl hover:backdrop-blur-sm"
         >
           <div class="h-[130px] w-full">
             <img
@@ -148,7 +148,7 @@
         <% }) %>
       </div>
       <div
-        class="absolute bottom-0 left-0 flex w-full text-white font-semibold justify-center bg-black/30 p-3 mt-5"
+        class="flex w-full text-white font-semibold justify-center bg-black/30 p-3 mt-5"
       >
         © 2025 Novel2Free.com by Novel2Free Public Company Limited
       </div>
