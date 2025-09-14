@@ -109,7 +109,7 @@
                         <div
                           class="text-xl sm:text-2xl font-bold text-orange-600"
                         >
-                          ฿<%= item.price %>
+                          ⭐<%= item.price %>
                         </div>
                       </div>
                       <!-- <form method="POST" action="/cart/remove/<%= item._id %>"> -->
@@ -141,27 +141,24 @@
                 </div>
                 <div class="flex justify-between items-center text-gray-700">
                   <span class="font-medium">Subtotal:</span>
-                  <span id="cart_subPrice" class="font-bold text-lg"
-                    >฿<%= totalPrice %></span
-                  >
+                  <span id="cart_subPrice" class="font-bold text-lg">⭐<%= totalPrice %></span>
                 </div>
                 <div class="border-t border-gray-300 pt-3">
                   <div class="flex justify-between items-center">
                     <span class="text-lg font-bold text-gray-900">Total:</span>
-                    <span
-                      id="cart_price"
-                      class="text-2xl font-bold text-orange-600"
-                      >฿<%= totalPrice %></span
-                    >
+                    <span id="cart_price" class="text-2xl font-bold text-orange-600"
+                      >⭐<%= totalPrice %></span>
                   </div>
                 </div>
               </div>
 
               <div class="mt-6 space-y-3">
                 <button
+                  id="checkoutBtn"
+                  type="button"
                   class="w-full bg-gradient-to-r from-purple-400 to-pink-500 hover:from-pink-500 hover:to-purple-400 text-white font-bold py-4 px-6 rounded-xl text-lg transition-all shadow-lg hover:shadow-xl transform hover:scale-105 duration-200"
                 >
-                  🚀 Proceed to Checkout
+                  🚀 Checkout
                 </button>
                 <a
                   href="/"

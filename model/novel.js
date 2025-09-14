@@ -16,6 +16,11 @@ const novelSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  category: {
+    type: String,
+    enum: ["Sci-Fi", "Romance","Fantasy","Horror","Comedy"],
+    default: "Not-Specified",
+  },
 });
 
 module.exports = mongoose.model('Novel', novelSchema);

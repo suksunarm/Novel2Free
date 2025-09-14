@@ -124,6 +124,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const contentNovel = document.getElementById("contentNovel").value;
       const priceNovel = parseInt(document.getElementById("priceNovel").value);
       const imgNovel = document.getElementById("imageNovel").value;
+      const categoryNovel = document.getElementById("categoryNovel").value;
+      console.log(categoryNovel);
 
       //เหลือ imgNovel
       const novel = {
@@ -131,6 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
         contentNovel,
         imgNovel,
         priceNovel,
+        categoryNovel,
       };
       addNovelFunction(novel);
     });
@@ -433,12 +436,14 @@ document.addEventListener("DOMContentLoaded", () => {
             title: "เพิ่มเข้าตะกร้าเรียบร้อย!",
             text: data.msg,
             confirmButtonText: "ตกลง",
+          }).then(() => {
+            window.location.href = "/";
           });
         } else {
           Swal.fire({
             icon: "error",
             title: "ผิดพลาด",
-            text: data.msg || "ไม่สามารถเพิ่มเข้าตะกร้าได้",
+            text: data.msg,
             confirmButtonText: "ตกลง",
           });
         }
@@ -446,7 +451,7 @@ document.addEventListener("DOMContentLoaded", () => {
         Swal.fire({
           icon: "error",
           title: "เกิดข้อผิดพลาด",
-          text: err.message,
+          text: err.msg,
           confirmButtonText: "ตกลง",
         });
       }
@@ -496,6 +501,47 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
+  
+  const checkoutBtn = document.getElementById("checkoutBtn");
+  if (checkoutBtn) {
+    checkoutBtn.addEventListener("click", async () => {
+      try {
+        const res = await fetch("/cart/checkout", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include", // ส่ง cookie JWT ไปด้วย
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          Swal.fire({
+            icon: "success",
+            title: "ซื้อสำเร็จ!",
+            text: data.msg,
+            confirmButtonText: "ตกลง",
+          }).then(() => {
+            window.location.reload(); // รีเฟรชหน้า cart
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "ผิดพลาด",
+            text: data.msg || "ซื้อไม่สำเร็จ",
+            confirmButtonText: "ตกลง",
+          });
+        }
+      } catch (err) {
+        Swal.fire({
+          icon: "error",
+          title: "เกิดข้อผิดพลาด",
+          text: err.message,
+          confirmButtonText: "ตกลง",
+        });
+      }
+    });
+  }
 });
 
 async function addPoint(point) {
