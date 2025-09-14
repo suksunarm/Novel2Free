@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (closeBtn) {
     closeBtn.addEventListener("click", () => {
       loginModal.classList.add("hidden");
-    })
+    });
   }
   //function Signin
   const signInFunction = async (data) => {
@@ -587,37 +587,88 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-async function addPoint(point) {
-  try {
-    const res = await fetch("http://localhost:3000/addPoint", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ point }),
-    });
+async function addPoint(point , price) {
+  const phone = "0803371641";
+  const priceFloat = parseFloat(price);
 
-    const data = await res.json();
+  // 1. สร้าง QR code ก่อน
+  const res = await fetch("http://localhost:3000/generate-promptpay-qr", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ phone, amount: priceFloat }),
+  });
+  const data = await res.json();
 
-    if (res.ok) {
-      // อัปเดต DOM แบบเรียลไทม์ ไม่ต้อง reload
-      const pointDisplay = document.getElementById("pointValue");
-      if (pointDisplay) {
-        pointDisplay.textContent = "My Point : " + data.points;
+  // 2. แสดง Swal พร้อม QR code
+  Swal.fire({
+    title: "ชำระเงินด้วย PromptPay",
+    html: `
+    <img src="${data.qrDataUrl}" 
+         alt="PromptPay QR" 
+         class="w-56 h-56 mx-auto mb-4" />
+    <div class="text-center text-lg font-semibold">
+      ยอดชำระ: <b>${priceFloat}</b> บาท
+    </div>
+  `,
+    showCancelButton: true,
+    confirmButtonText: "ตกลง",
+    cancelButtonText: "ยกเลิก",
+    focusConfirm: false,
+    allowOutsideClick: false,
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      // 3. ถ้ากดตกลง ให้เติม point จริง
+      try {
+        const res = await fetch("http://localhost:3000/addPoint", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ point }),
+        });
+        const addData = await res.json();
+
+        if (res.ok) {
+          const pointDisplay = document.getElementById("pointValue");
+          if (pointDisplay) {
+            pointDisplay.textContent = "My Points : " + addData.points;
+          }
+          Swal.fire({
+            icon: "success",
+            title: "เติมสำเร็จ!",
+            text: `${addData.msg} +${point} Points`,
+          }).then(() => {
+          window.location.href = '/';
+        });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "ผิดพลาด",
+            text: addData.msg || "เติมไม่สำเร็จ",
+          });
+        }
+      } catch (err) {
+        Swal.fire({
+          icon: "error",
+          title: "เกิดข้อผิดพลาด",
+          text: err.message,
+        });
       }
-      Swal.fire({
-        icon: "success",
-        title: "สำเร็จ",
-        text: `${data.msg} +${point} Points`,
-      });
-    } else {
-      Swal.fire({
-        icon: "error",
-        title: "เกิดข้อผิดพลาด",
-        text: `${data.msg}`,
-      });
     }
-  } catch (err) {
-    console.error("เติมพอยท์ล้มเหลว ", err);
-  }
+  });
+}
+
+async function generateQRCode(point) {
+  const phone = "0803371641";
+  const pointFloat = parseFloat(point);
+  console.log(pointFloat);
+
+  // ส่งไป backend
+  const res = await fetch("http://localhost:3000/generate-promptpay-qr", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ phone, amount: pointFloat }),
+  });
+  const data = await res.json();
+  document.getElementById(
+    "qrContainer"
+  ).innerHTML = `<img src="${data.qrDataUrl}" alt="PromptPay QR"/>`;
 }

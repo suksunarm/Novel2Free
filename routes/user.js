@@ -6,13 +6,15 @@ const User = require("../model/user");
 const Novel = require("../model/novel");
 const jwt = require("jsonwebtoken");
 const authMiddleware = require("../auth/auth");
+const generatePayload = require('promptpay-qr');
+const QRCode = require('qrcode');
 
 const role = "user";
 
 router.get("/", async (req, res) => {
   let user;
   const token = req.cookies.token;
-  // เพิิ่มเช็กใน token ในหน้านี้เท่านั้น ไม่ต้องใช้ Middleware 
+  // เพิิ่มเช็กใน token ในหน้านี้เท่านั้น ไม่ต้องใช้ Middleware
   if (token) {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -22,7 +24,28 @@ router.get("/", async (req, res) => {
     }
   }
   const novels = await Novel.find();
-  res.render("home_page", { pageTitle: "หน้าหลัก", novels , user });
+  res.render("home_page", { pageTitle: "หน้าหลัก", novels, user });
+});
+
+router.post("/generate-promptpay-qr", async (req, res) => {
+  try {
+    const { phone, amount } = req.body;
+
+    // สร้าง PromptPay payload
+    const payload = generatePayload(phone, { amount });
+
+    // สร้าง QR code เป็น DataURL
+    const qrDataUrl = await QRCode.toDataURL(payload, {
+      color: { dark: "#000", light: "#fff" },
+    });
+
+    res.json({ qrDataUrl });
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ msg: "สร้าง PromptPay QR ล้มเหลว", error: err.message });
+  }
 });
 
 router.get("/my-novel", authMiddleware, async (req, res) => {
