@@ -458,6 +458,57 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  const addToFavoriteBtn = document.getElementById("addToFavoriteBtn");
+
+  if (addToFavoriteBtn) {
+    addToFavoriteBtn.addEventListener("click", async () => {
+      const novelId = addToFavoriteBtn.dataset.id;
+      console.log(novelId);
+
+      try {
+        const res = await fetch(
+          `http://localhost:3000/add-novel-in-favorite/${novelId}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include", // ส่ง cookie JWT ไปด้วย
+            body: JSON.stringify({ novelId }),
+          }
+        );
+
+        const data = await res.json();
+
+        if (res.ok) {
+          Swal.fire({
+            icon: "success",
+            title: "เพิ่มเข้ารายการโปรดเรียบร้อย!",
+            text: data.msg,
+            confirmButtonText: "ตกลง",
+          }).then(() => {
+            window.location.href = "/";
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "ผิดพลาด",
+            text: data.msg,
+            confirmButtonText: "ตกลง",
+          });
+        }
+      } catch (err) {
+        Swal.fire({
+          icon: "error",
+          title: "เกิดข้อผิดพลาด",
+          text: err.msg,
+          confirmButtonText: "ตกลง",
+        });
+      }
+    });
+  }
+  
+
   const cartContainer = document.querySelector("#cart-container");
   const cartItems = document.querySelector("#cart_items");
   const cartSubPrice = document.querySelector("#cart_subPrice");
