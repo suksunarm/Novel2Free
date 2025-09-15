@@ -5,29 +5,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <title><%= pageTitle %></title>
+    <style>
+      @keyframes gradient-x {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+      .animate-gradient-x {
+        background-size: 200% 200%;
+        animation: gradient-x 5s ease infinite;
+      }
+    </style>
   </head>
   <body class="flex flex-col min-h-screen">
+    <!-- Main Content with Background -->
     <div
-      class="flex flex-col bg-[url('/assets/bg.png')] min-h-screen bg-center bg-cover"
+      class="flex-1 flex flex-col bg-[url('/assets/bg.png')] bg-center bg-cover"
     >
-      <!-- Navbar -->
       <nav
-        class="sticky top-0 z-50 flex items-center justify-between px-6 py-4 bg-gray-900 shadow-lg"
+        class="sticky text-white top-0 z-50 flex flex-wrap items-center justify-between px-4 sm:px-6 py-3 bg-gray-900/80 backdrop-blur-md shadow-lg transition-all duration-500"
       >
         <!-- Logo -->
         <a
           href="/"
-          class="text-3xl font-extrabold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent"
+          class="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent animate-gradient-x"
         >
           Novel2Free
         </a>
 
+        <!-- Search Form -->
+        <div class="flex-1 flex justify-center mt-2 sm:mt-0 w-full sm:w-auto">
+          <form
+            id="searchForm"
+            class="flex text-white gap-2 items-center w-full max-w-full sm:max-w-xl"
+          >
+            <input
+              type="text"
+              id="searchInput"
+              name="q"
+              placeholder="ค้นหานิยาย, หมวดหมู่, ราคา, เนื้อหา..."
+              class="flex-1 px-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-400 transition duration-300 text-sm sm:text-base"
+              autocomplete="off"
+            />
+            <button
+              type="submit"
+              class="cursor-pointer px-3 sm:px-4 py-2 rounded-lg bg-gradient-to-r from-pink-500 to-purple-500 text-white font-semibold hover:scale-105 hover:shadow-xl transition-all duration-300 text-sm sm:text-base"
+            >
+              ค้นหา
+            </button>
+          </form>
+        </div>
+
         <!-- Right Menu -->
-        <div class="flex text-white items-center gap-4">
-          <!-- Cart Button -->
+        <div class="flex flex-wrap gap-2 sm:gap-4 items-center mt-2 sm:mt-0">
+          <!-- Cart -->
           <a
             href="/cart"
-            class="flex items-center min-h-10 gap-2 px-4 py-2 rounded-lg bg-[#5D4F71] hover:bg-[#5D4F71]/30 transition duration-300"
+            class="flex items-center gap-1 px-3 py-2 rounded-lg bg-[#6E5A8A]/70 hover:bg-[#8164FF]/80 hover:scale-105 hover:shadow-lg transition-all duration-300 text-xs sm:text-sm font-medium"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -35,7 +75,7 @@
               height="22"
               fill="currentColor"
               viewBox="0 0 24 24"
-              class="w-5 h-5"
+              class="w-4 h-4 sm:w-5 sm:h-5"
             >
               <circle cx="8" cy="21" r="1" />
               <circle cx="19" cy="21" r="1" />
@@ -43,13 +83,13 @@
                 d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"
               />
             </svg>
-            <span class="text-sm font-medium">ตะกร้า</span>
+            <span class="hidden sm:inline">ตะกร้า</span>
           </a>
 
           <!-- My Novels -->
           <a
             href="/my-novel"
-            class="flex items-center min-h-10 px-4 py-2 rounded-lg bg-[#5D4F71] hover:bg-[#5D4F71]/30 transition duration-300 text-sm font-medium"
+            class="px-3 py-2 rounded-lg bg-[#6E5A8A]/70 hover:bg-[#8164FF]/80 hover:scale-105 hover:shadow-lg transition-all duration-300 text-xs sm:text-sm font-medium"
           >
             นิยายของฉัน
           </a>
@@ -57,16 +97,16 @@
           <!-- Favorite -->
           <a
             href="/favorite"
-            class="px-4 py-2 rounded-xl bg-[#6E5A8A]/70 hover:bg-[#8164FF]/80 transition-all duration-300 transform hover:scale-105 shadow-lg"
+            class="px-3 py-2 rounded-lg bg-[#6E5A8A]/70 hover:bg-[#8164FF]/80 hover:scale-105 hover:shadow-lg transition-all duration-300 text-xs sm:text-sm font-medium"
           >
-            <span class="font-semibold text-white">รายการโปรด</span>
+            <span class="hidden sm:inline">รายการโปรด</span>
           </a>
 
-          <!-- Points -->
+          <!-- Points / Sign In -->
           <% if (user) { %>
           <a
             href="/point"
-            class="flex items-center gap-1 px-4 py-2 rounded-lg bg-gradient-to-r from-yellow-600 to-pink-500 text-black font-semibold hover:opacity-90 transition duration-300"
+            class="flex items-center gap-1 px-3 py-2 rounded-lg bg-gradient-to-r from-yellow-600 to-pink-500 text-black font-semibold hover:scale-105 hover:shadow-xl transition-all duration-300 text-xs sm:text-sm"
           >
             <span class="font-bold text-white"><%= user.points %></span>
             <svg
@@ -75,7 +115,7 @@
               height="18"
               viewBox="0 0 24 24"
               fill="currentColor"
-              class="w-5 h-5 text-yellow-200"
+              class="w-4 h-4 sm:w-5 sm:h-5 text-yellow-200"
             >
               <path
                 d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
@@ -108,7 +148,6 @@
                 <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
               </svg>
             </div>
-
             <!-- Dropdown menu -->
             <div
               id="userDropdown"
@@ -138,37 +177,36 @@
         </div>
       </nav>
 
-      <div class="px-16 py-10 space-y-12">
+      <!-- Content Grid Responsive -->
+      <main class="px-4 sm:px-16 py-10 space-y-12 flex-1">
         <% ["Sci-Fi", "Romance", "Fantasy", "Horror", "Comedy"].forEach(cat => {
         const catNovels = novels.filter(n => n.category === cat); if
         (catNovels.length > 0) { %>
-
         <section>
-          <!-- หัวข้อ -->
           <h2
-            class="ml-10 text-2xl font-bold text-white mb-6 border-l-4 border-pink-400 pl-3"
+            class="ml-2 sm:ml-10 text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 border-l-4 border-pink-400 pl-2 sm:pl-3"
           >
             <%= cat %>
           </h2>
-
-          <!-- การ์ดในหมวดนี้ -->
-          <div class="grid grid-cols-6 gap-6 px-20">
+          <div
+            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6 px-0 sm:px-20"
+          >
             <% catNovels.forEach(novel => { %>
             <a
               href="/detail_novel/<%= novel._id %>"
-              class="text-white bg-white/10 w-[200px] rounded-sm overflow-hidden shadow-xl transition-all duration-300 ease-in-out hover:scale-105 hover:bg-white/20 hover:shadow-2xl"
+              class="text-white bg-white/10 w-full rounded-sm overflow-hidden shadow-xl transition-all duration-300 ease-in-out hover:scale-105 hover:bg-white/20 hover:shadow-2xl"
             >
-              <!-- ปก -->
-              <div class="h-[250px] w-full">
+              <div class="h-40 sm:h-[250px] w-full">
                 <img
                   class="object-cover h-full w-full"
                   src="<%= novel.image_url %>"
                   alt="<%= novel.title %>"
                 />
               </div>
-              <!-- เนื้อหา -->
-              <div class="p-3 space-y-1">
-                <div class="font-semibold truncate"><%= novel.title %></div>
+              <div class="p-2 sm:p-3 space-y-1">
+                <div class="font-semibold truncate text-sm sm:text-base">
+                  <%= novel.title %>
+                </div>
                 <div class="text-xs text-gray-400 truncate">
                   <%= novel.category %>
                 </div>
@@ -182,19 +220,10 @@
                     height="18"
                     viewBox="0 0 24 24"
                     fill="currentColor"
-                    class="text-yellow-200"
+                    class="text-yellow-200 w-4 h-4 sm:w-5 sm:h-5"
                   >
                     <path
-                      d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 
-                       4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 
-                       0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 
-                       0-.611 1.878l.882 5.14a.53.53 0 0 
-                       1-.771.56l-4.618-2.428a2.122 2.122 0 0 
-                       0-1.973 0L6.396 21.01a.53.53 0 0 
-                       1-.77-.56l.881-5.139a2.122 2.122 
-                       0 0 0-.611-1.879L2.16 9.795a.53.53 
-                       0 0 1 .294-.906l5.165-.755a2.122 
-                       2.122 0 0 0 1.597-1.16z"
+                      d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
                     />
                   </svg>
                 </div>
@@ -203,16 +232,17 @@
             <% }) %>
           </div>
         </section>
-
         <% } }) %>
-      </div>
+      </main>
 
-      <div
-        class="flex w-full text-white font-semibold justify-center bg-black/30 p-3 mt-5"
+      <!-- Footer -->
+      <footer
+        class="flex w-full text-white font-semibold justify-center bg-black/30 p-3"
       >
         © 2025 Novel2Free.com by Novel2Free Public Company Limited
-      </div>
+      </footer>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/js/script.js"></script>
   </body>
