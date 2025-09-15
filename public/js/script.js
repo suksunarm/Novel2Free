@@ -534,7 +534,7 @@ document.addEventListener("DOMContentLoaded", () => {
           if (res.ok) {
             heartIcon.setAttribute("fill", "none");
             heartIcon.setAttribute("stroke", "currentColor");
-            Swal.fire("ลบออกจากรายการโปรดแล้ว!", data.msg, "success");
+
           } else {
             Swal.fire("ผิดพลาด", data.msg, "error");
           }
@@ -630,6 +630,11 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+window.addEventListener("pageshow", (event) => {
+  if (event.persisted) {
+    loadFavorites();
+}});
+  
 });
 
 async function addPoint(point , price) {
@@ -717,3 +722,27 @@ async function generateQRCode(point) {
     "qrContainer"
   ).innerHTML = `<img src="${data.qrDataUrl}" alt="PromptPay QR"/>`;
 }
+
+async function loadFavorites() {
+  const res = await fetch("/api/favorites", { credentials: "include" });
+  const data = await res.json();
+
+  const container = document.getElementById("favoritesContainer");
+  container.innerHTML = "";
+  data.forEach(novel => {
+    container.innerHTML += `
+      <a href="/detail_novel/${novel._id}" 
+         class="w-[200px] h-[260px] rounded-xl overflow-hidden shadow-lg bg-white/10 backdrop-blur-md transition transform hover:scale-105 hover:-translate-y-1 hover:shadow-2xl hover:shadow-pink-500/20">
+        <div class="relative w-full h-full">
+          <img src="${novel.image_url}" alt="Novel Cover" class="w-full h-full object-cover" />
+          <div class="absolute bottom-0 w-full bg-black/50 backdrop-blur-sm p-3">
+            <h3 class="text-base font-bold truncate">${novel.title}</h3>
+            <div class="flex justify-between items-center">
+              <span class="text-pink-400 font-bold">${novel.price}฿</span>
+            </div>
+          </div>
+        </div>
+      </a>`;
+  });
+}
+

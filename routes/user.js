@@ -105,7 +105,7 @@ router.get("/favorite", authMiddleware, async (req, res) => {
     const user = req.user;
     const novelOfUser = await User.findById(user).populate(
       "favorite.novel_id"
-    ); //ดึงข้อมูล novel ที่อยู่ในตะกร้าทั้งหมด
+    ); //ดึงข้อมูล novel ที่อยู่ในรายการโปรดทั้งหมด
 
     if (user.role !== role) {
       return res.redirect("/signin");
@@ -121,6 +121,21 @@ router.get("/favorite", authMiddleware, async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(500).send("Server Error!");
+  }
+});
+
+router.get("/api/favorites", authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.user).populate("favorite.novel_id");
+    const favorites = user.favorite.map(item => ({
+      _id: item.novel_id._id,
+      title: item.novel_id.title,
+      price: item.novel_id.price,
+      image_url: item.novel_id.image_url
+    }));
+    res.json(favorites);
+  } catch (err) {
+    res.status(500).json({ msg: "Server Error" });
   }
 });
 
