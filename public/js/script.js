@@ -100,6 +100,19 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  const searchForm = document.getElementById("searchForm");
+  const searchInput = document.getElementById("searchInput");
+  
+  if (searchForm && searchInput) {
+    searchForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const q = searchInput.value.trim();
+      if (q) {
+        window.location.href = `/?q=${encodeURIComponent(q)}`;
+      }
+    });
+  }
+
   const addNovelFunction = async (data) => {
     try {
       const response = await fetch("http://localhost:3000/admin/addNovel", {

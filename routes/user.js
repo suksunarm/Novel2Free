@@ -6,8 +6,8 @@ const User = require("../model/user");
 const Novel = require("../model/novel");
 const jwt = require("jsonwebtoken");
 const authMiddleware = require("../auth/auth");
-const generatePayload = require('promptpay-qr');
-const QRCode = require('qrcode');
+const generatePayload = require("promptpay-qr");
+const QRCode = require("qrcode");
 
 const role = "user";
 
@@ -21,9 +21,25 @@ router.get("/", async (req, res) => {
       user = await User.findById(decoded.id);
     } catch (err) {
       res.status(500).send("Failed to fetch novels and point: " + err.message);
+      user = undefined;
     }
   }
-  const novels = await Novel.find();
+  const q = req.query.q;
+  let novels;
+  if (q) {
+    // ค้นหาจาก title, category, price, content
+    const regex = new RegExp(q, "i");
+    novels = await Novel.find({
+      $or: [
+        { title: regex },
+        { category: regex },
+        { content: regex },
+        { price: isNaN(q) ? undefined : Number(q) },
+      ],
+    });
+  } else {
+    novels = await Novel.find();
+  }
   res.render("home_page", { pageTitle: "หน้าหลัก", novels, user });
 });
 
@@ -111,8 +127,8 @@ router.get("/favorite", authMiddleware, async (req, res) => {
       return res.redirect("/signin");
     }
 
-    const favoriteItems = novelOfUser.favorite.map(item => item.novel_id);
-    console.log('test',favoriteItems);
+    const favoriteItems = novelOfUser.favorite.map((item) => item.novel_id);
+    console.log("test", favoriteItems);
 
     res.render("favorite", {
       pageTitle: "รายการโปรด",
@@ -296,17 +312,23 @@ router.post("/add-novel-in-favorite/:id", authMiddleware, async (req, res) => {
   }
 });
 
-router.delete("/remove-novel-from-favorite/:id", authMiddleware, async (req, res) => {
-  try {
-    const novelId = req.params.id;
-    const user = req.user;
-    user.favorite = user.favorite.filter(item => item.novel_id.toString() !== novelId);
-    await user.save();
-    res.json({ msg: "ลบออกจากรายการโปรดแล้ว" });
-  } catch (err) {
-    res.status(500).json({ msg: "Server Error" });
+router.delete(
+  "/remove-novel-from-favorite/:id",
+  authMiddleware,
+  async (req, res) => {
+    try {
+      const novelId = req.params.id;
+      const user = req.user;
+      user.favorite = user.favorite.filter(
+        (item) => item.novel_id.toString() !== novelId
+      );
+      await user.save();
+      res.json({ msg: "ลบออกจากรายการโปรดแล้ว" });
+    } catch (err) {
+      res.status(500).json({ msg: "Server Error" });
+    }
   }
-});
+);
 
 router.delete("/cart/remove/:id", authMiddleware, async (req, res) => {
   try {
@@ -341,19 +363,6 @@ router.delete("/cart/remove/:id", authMiddleware, async (req, res) => {
     res.status(500).send("Server Error!");
   }
 });
-
-// router.delete("/novel/:id", async (req, res) => {
-//   try {
-//     const novel = await Novel.findByIdAndDelete(req.params.id);
-//     console.log(novel);
-//     if (!novel) {
-//       return res.status(404).json({ msg: "Novel not found" });
-//     }
-//     res.json({ msg: "Delete Novel Success", novel });
-//   } catch (err) {
-//     res.status(500).json({ msg: "Delete Novel Failed", error: err.message });
-//   }
-// });
 
 router.post("/cart/checkout", authMiddleware, async (req, res) => {
   try {
