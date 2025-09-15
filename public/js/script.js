@@ -36,9 +36,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }).then(() => {
           window.location.href = data.redirectPath;
         });
+        const result = await response.json();
+        sessionStorage.setItem("jwt", result.token);
         formSignin.reset();
-        const data = await response.json();
-        sessionStorage.setItem("jwt", data.token);
       } else {
         Swal.fire({
           icon: "error",
@@ -67,6 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
           title: "เกิดข้อผิดพลาด",
           text: "กรอกรหัสผ่านไม่ตรงกัน!",
         });
+        return;
       }
 
       if (password == confirmPassword) {
@@ -99,19 +100,19 @@ document.addEventListener("DOMContentLoaded", () => {
       signInFunction(login);
     });
   }
+  const navBarBurgur = document.getElementById("navToggle");
+  if (navBarBurgur) {
+    navBarBurgur.addEventListener("click", () => {
+      const rightMenu = document.getElementById("rightMenu");
+      const hamburgerIcon = document.getElementById("hamburgerIcon");
+      const closeIcon = document.getElementById("closeIcon");
 
-  document.getElementById("navToggle").addEventListener("click", () => {
-    const rightMenu = document.getElementById("rightMenu");
-    const hamburgerIcon = document.getElementById("hamburgerIcon");
-    const closeIcon = document.getElementById("closeIcon");
-
-    rightMenu.classList.toggle("hidden");
-    rightMenu.classList.toggle("flex");
-    hamburgerIcon.classList.toggle("hidden");
-    closeIcon.classList.toggle("hidden");
-  });
-
-
+      rightMenu.classList.toggle("hidden");
+      rightMenu.classList.toggle("flex");
+      hamburgerIcon.classList.toggle("hidden");
+      closeIcon.classList.toggle("hidden");
+    });
+  }
   const searchForm = document.getElementById("searchForm");
   const searchInput = document.getElementById("searchInput");
 
@@ -299,15 +300,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // ออกจากระบบจาก dropdown
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", async () => {
-      sessionStorage.removeItem("jwt");
-      await logoutFunction();
-      window.location.href = "/";
-    });
-  }
-
   // LOGOUT & Check Token
   const token = sessionStorage.getItem("jwt");
   const logoutAdmin = document.getElementById("logoutAdmin");
@@ -338,9 +330,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (logoutAdmin) {
     logoutAdmin.addEventListener("click", async () => {
-      sessionStorage.removeItem("jwt");
       await logoutFunction();
       window.location.href = "/";
+      sessionStorage.removeItem("jwt");
       console.log("ออกจากระบบ");
     });
   }
