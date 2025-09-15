@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         formSignin.reset();
         const data = await response.json();
-        localStorage.setItem("token", data.token);
+        sessionStorage.setItem("jwt", data.token);
       } else {
         Swal.fire({
           icon: "error",
@@ -102,7 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const searchForm = document.getElementById("searchForm");
   const searchInput = document.getElementById("searchInput");
-  
+
   if (searchForm && searchInput) {
     searchForm.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -290,14 +290,14 @@ document.addEventListener("DOMContentLoaded", () => {
   // ออกจากระบบจาก dropdown
   if (logoutBtn) {
     logoutBtn.addEventListener("click", async () => {
-      localStorage.removeItem("token");
+      sessionStorage.removeItem("jwt");
       await logoutFunction();
       window.location.href = "/";
     });
   }
 
   // LOGOUT & Check Token
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("jwt");
   const logoutAdmin = document.getElementById("logoutAdmin");
 
   if (signinBtn && userIcon) {
@@ -314,7 +314,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (logoutBtn) {
     logoutBtn.addEventListener("click", async () => {
       console.log("Logout clicked");
-      localStorage.removeItem("token");
+      sessionStorage.removeItem("jwt");
       await logoutFunction();
       window.location.href = "/";
       signinBtn.classList.remove("hidden");
@@ -326,7 +326,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (logoutAdmin) {
     logoutAdmin.addEventListener("click", async () => {
-      localStorage.removeItem("token");
+      sessionStorage.removeItem("jwt");
       await logoutFunction();
       window.location.href = "/";
       console.log("ออกจากระบบ");
@@ -466,57 +466,65 @@ document.addEventListener("DOMContentLoaded", () => {
   //ตะกร้า
   const addToCartBtns = document.querySelectorAll(".addToCartBtn");
 
-  addToCartBtns.forEach(btn => {
-  btn.addEventListener("click", async () => {
-    const novelId = btn.dataset.id;
-    console.log(novelId);
-    
-    if (token) {
-      try {
-        const res = await fetch(
-          `http://localhost:3000/add-novel-in-cart/${novelId}`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include", // ส่ง cookie JWT ไปด้วย
-            body: JSON.stringify({ novelId }),
+  if (addToCartBtns) {
+    addToCartBtns.forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const novelId = btn.dataset.id;
+        console.log(novelId, "token", token);
+
+        if (token) {
+          try {
+            const res = await fetch(
+              `http://localhost:3000/add-novel-in-cart/${novelId}`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                },
+                credentials: "include", // ส่ง cookie JWT ไปด้วย
+                body: JSON.stringify({ novelId }),
+              }
+            );
+            if (res.status === 401) {
+              Swal.fire({
+                icon: "warning",
+                title: "โปรดเข้าสู่ระบบ",
+                confirmButtonText: "ไปหน้าเข้าสู่ระบบ",
+              }).then(() => {
+                window.location.href = "/signin";
+              });
+              return;
+            }
+
+            const data = await res.json();
+
+            if (res.ok) {
+              Swal.fire({
+                icon: "success",
+                title: "เพิ่มเข้าตะกร้าเรียบร้อย!",
+                text: data.msg,
+                confirmButtonText: "ตกลง",
+              }).then(() => {
+                window.location.href = "/";
+              });
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "ผิดพลาด",
+                text: data.msg,
+                confirmButtonText: "ตกลง",
+              });
+            }
+          } catch (err) {
+            console.error(err);
           }
-        );
-
-        const data = await res.json();
-
-        if (res.ok) {
-          Swal.fire({
-            icon: "success",
-            title: "เพิ่มเข้าตะกร้าเรียบร้อย!",
-            text: data.msg,
-            confirmButtonText: "ตกลง",
-          }).then(() => {
-            window.location.href = "/";
-          });
         } else {
-          Swal.fire({
-            icon: "error",
-            title: "ผิดพลาด",
-            text: data.msg,
-            confirmButtonText: "ตกลง",
-          });
+          window.location.href = "/signin"
         }
-      } catch (err) {
-        Swal.fire({
-          icon: "error",
-          title: "เกิดข้อผิดพลาด",
-          text: err.message || "เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ",
-          confirmButtonText: "ตกลง",
-        });
-      }
-    } else {
-      window.location.href = "/signin";
-    }
-  });
-});
+      });
+    });
+  }
 
   const favBtn = document.getElementById("addToFavoriteBtn");
   const heartIcon = document.getElementById("heartIcon");
