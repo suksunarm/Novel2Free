@@ -501,6 +501,51 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+ const favBtn = document.getElementById("addToFavoriteBtn");
+  const heartIcon = document.getElementById("heartIcon");
+  if (favBtn && heartIcon) {
+    favBtn.addEventListener("click", async () => {
+      const novelId = favBtn.dataset.id;
+      const isRed = heartIcon.getAttribute("fill") === "red";
+      try {
+        let res, data;
+        if (!isRed) {
+          res = await fetch(`/add-novel-in-favorite/${novelId}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ novelId }),
+          });
+          data = await res.json();
+          if (res.ok) {
+            heartIcon.setAttribute("fill", "red");
+            heartIcon.setAttribute("stroke", "red");
+            Swal.fire("เพิ่มเข้ารายการโปรดเรียบร้อย!", data.msg, "success");
+          } else {
+            Swal.fire("ผิดพลาด", data.msg, "error");
+          }
+        } else {
+          res = await fetch(`/remove-novel-from-favorite/${novelId}`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+          });
+          data = await res.json();
+          if (res.ok) {
+            heartIcon.setAttribute("fill", "none");
+            heartIcon.setAttribute("stroke", "currentColor");
+            Swal.fire("ลบออกจากรายการโปรดแล้ว!", data.msg, "success");
+          } else {
+            Swal.fire("ผิดพลาด", data.msg, "error");
+          }
+        }
+      } catch (err) {
+        Swal.fire("เกิดข้อผิดพลาด", err.message, "error");
+      }
+    });
+  }
+  
+
   const cartContainer = document.querySelector("#cart-container");
   const cartItems = document.querySelector("#cart_items");
   const cartSubPrice = document.querySelector("#cart_subPrice");

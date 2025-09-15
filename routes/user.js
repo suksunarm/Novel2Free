@@ -100,6 +100,30 @@ router.get("/cart", authMiddleware, async (req, res) => {
   }
 });
 
+router.get("/favorite", authMiddleware, async (req, res) => {
+  try {
+    const user = req.user;
+    const novelOfUser = await User.findById(user).populate(
+      "favorite.novel_id"
+    ); //ดึงข้อมูล novel ที่อยู่ในตะกร้าทั้งหมด
+
+    if (user.role !== role) {
+      return res.redirect("/signin");
+    }
+
+    const favoriteItems = novelOfUser.favorite.map(item => item.novel_id);
+    console.log('test',favoriteItems);
+
+    res.render("favorite", {
+      pageTitle: "รายการโปรด",
+      favoriteItems,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Server Error!");
+  }
+});
+
 router.get("/point", authMiddleware, async (req, res) => {
   const user = req.user;
   if (user.role !== role) {
@@ -160,10 +184,14 @@ router.post("/create_user", async (req, res) => {
   }
 });
 
-router.get("/detail_novel/:id", async (req, res) => {
+router.get("/detail_novel/:id", authMiddleware, async (req, res) => {
   const novelId = req.params.id;
   const novel = await Novel.findById(novelId);
-  res.render("detail_novel", { pageTitle: novel.title, novel });
+  let isFavorite = false;
+  if (req.user && req.user.favorite) {
+    isFavorite = req.user.favorite.some(item => item.novel_id.toString() === novelId);
+  }
+  res.render("detail_novel", { pageTitle: novel.title, novel, isFavorite });
 });
 
 // เพิ่มนิยายเข้าตะกร้า
@@ -198,6 +226,51 @@ router.post("/add-novel-in-cart/:id", authMiddleware, async (req, res) => {
     res.json({ msg: "เพิ่มนิยายเข้าตะกร้าแล้ว ✅" });
   } catch (err) {
     console.error(err);
+    res.status(500).json({ msg: "Server Error" });
+  }
+});
+
+router.post("/add-novel-in-favorite/:id", authMiddleware, async (req, res) => {
+  try {
+    const novelId = req.params.id;
+    const user = req.user;
+
+    // หา novel
+    const novel = await Novel.findById(novelId);
+    if (!novel) {
+      return res.status(404).json({ msg: "Novel not found" });
+    }
+
+    // เช็กว่ามี novel_id นี้ใน cart_items แล้วหรือยัง
+    const alreadyInFavorite = user.favorite.some(
+      (item) => item.novel_id.toString() === novelId
+    );
+    if (alreadyInFavorite) {
+      return res.status(400).json({ msg: "นิยายนี้อยู่ในรายการโปรดแล้ว" });
+    }
+
+    // อัปเดตตะกร้า
+    user.favorite.push({
+      novel_id: novel._id,
+    });
+
+    await user.save();
+
+    res.json({ msg: "เพิ่มนิยายเข้ารายการโปรดแล้ว ✅" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: "Server Error" });
+  }
+});
+
+router.delete("/remove-novel-from-favorite/:id", authMiddleware, async (req, res) => {
+  try {
+    const novelId = req.params.id;
+    const user = req.user;
+    user.favorite = user.favorite.filter(item => item.novel_id.toString() !== novelId);
+    await user.save();
+    res.json({ msg: "ลบออกจากรายการโปรดแล้ว" });
+  } catch (err) {
     res.status(500).json({ msg: "Server Error" });
   }
 });
