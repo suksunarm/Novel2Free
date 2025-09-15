@@ -37,7 +37,7 @@
         </div>
       </div>
 
-      <div class="max-w-lg mx-auto px-4 py-8">
+      <div class="max-w-md sm:max-w-lg mx-auto px-4 py-8">
         <div
           id="cart-container"
           class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden"
@@ -63,7 +63,7 @@
           <!-- Cart Items Loop -->
           <div class="divide-y divide-gray-100">
             <% cartItems.forEach(item => { %>
-            <div class="cart-item p-6 hover:bg-gray-50/80 transition-colors">
+            <div class="cart-item p-4 sm:p-5 hover:bg-gray-50/80 transition-colors">
               <div class="flex flex-col sm:flex-row gap-4">
                 <div class="flex-shrink-0">
                   <img
@@ -79,7 +79,7 @@
                   >
                     <div class="min-w-0 flex-grow">
                       <h2
-                        class="text-lg sm:text-xl font-bold text-gray-900 line-clamp-2 break-words"
+                        class="text-base sm:text-lg font-bold text-gray-900 line-clamp-2 break-words"
                       >
                         <%= item.novel_id.title %>
                       </h2>
@@ -107,7 +107,7 @@
                     >
                       <div class="text-right">
                         <div
-                          class="text-xl sm:text-2xl font-bold text-orange-600"
+                          class="text-lg sm:text-xl font-bold text-orange-600"
                         >
                           ⭐<%= item.price %>
                         </div>
@@ -129,7 +129,7 @@
 
           <!-- Summary -->
           <div
-            class="bg-gray-50/80 backdrop-blur-sm p-6 border-t border-gray-200"
+            class="bg-gray-50/80 backdrop-blur-sm p-4 sm:p-6 border-t border-gray-200"
           >
             <div class="max-w-md ml-auto">
               <div class="space-y-3">
