@@ -100,6 +100,19 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  const searchForm = document.getElementById("searchForm");
+  const searchInput = document.getElementById("searchInput");
+  
+  if (searchForm && searchInput) {
+    searchForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const q = searchInput.value.trim();
+      if (q) {
+        window.location.href = `/?q=${encodeURIComponent(q)}`;
+      }
+    });
+  }
+
   const addNovelFunction = async (data) => {
     try {
       const response = await fetch("http://localhost:3000/admin/addNovel", {
@@ -501,7 +514,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
- const favBtn = document.getElementById("addToFavoriteBtn");
+  const favBtn = document.getElementById("addToFavoriteBtn");
   const heartIcon = document.getElementById("heartIcon");
   if (favBtn && heartIcon) {
     favBtn.addEventListener("click", async () => {
@@ -544,7 +557,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
-  
 
   const cartContainer = document.querySelector("#cart-container");
   const cartItems = document.querySelector("#cart_items");
@@ -632,7 +644,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-async function addPoint(point , price) {
+async function addPoint(point, price) {
   const phone = "0803371641";
   const priceFloat = parseFloat(price);
 
@@ -681,8 +693,8 @@ async function addPoint(point , price) {
             title: "เติมสำเร็จ!",
             text: `${addData.msg} +${point} Points`,
           }).then(() => {
-          window.location.href = '/';
-        });
+            window.location.href = "/";
+          });
         } else {
           Swal.fire({
             icon: "error",
