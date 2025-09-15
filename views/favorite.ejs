@@ -27,41 +27,58 @@
         </a>
       </nav>
 
-      <!-- Main -->
-      <main class="px-6 py-10 max-w-6xl mx-auto">
-        <h2 class="text-3xl font-bold mb-6">My Favorites ❤️</h2>
+      <main class="px-4 sm:px-16 py-10 flex-1">
+        <h2
+          class="ml-2 sm:ml-10 text-xl sm:text-2xl font-bold text-white mb-6 border-l-4 border-pink-400 pl-2 sm:pl-3"
+        >
+          My Favorites ❤️
+        </h2>
+
+        <% if (favoriteItems.length === 0) { %>
+        <div class="text-white text-xl ml-10">ยังไม่มีรายการโปรด</div>
+        <% } else { %>
         <div
-          id="favoritesContainer"
-          class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"
+          class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6 px-0 sm:px-20"
         >
           <% favoriteItems.forEach(novel => { %>
           <a
             href="/detail_novel/<%= novel._id %>"
-            class="w-[200px] h-[260px] rounded-xl overflow-hidden shadow-lg bg-white/10 backdrop-blur-md transition transform hover:scale-105 hover:-translate-y-1 hover:shadow-2xl hover:shadow-pink-500/20"
+            class="text-white bg-white/10 w-full rounded-sm overflow-hidden shadow-xl transition-all duration-300 ease-in-out hover:scale-105 hover:bg-white/20 hover:shadow-2xl"
           >
-            <!-- Card container -->
-            <div class="relative w-full h-full">
-              <!-- Cover image -->
+            <div class="h-40 sm:h-[250px] w-full">
               <img
+                class="object-cover h-full w-full"
                 src="<%= novel.image_url %>"
-                alt="Novel Cover"
-                class="w-full h-full object-cover"
+                alt="<%= novel.title %>"
               />
-              <!-- Overlay bottom -->
+            </div>
+            <div class="p-2 sm:p-3 space-y-1">
+              <div class="font-semibold truncate text-sm sm:text-base">
+                <%= novel.title %>
+              </div>
+              <div class="text-xs text-gray-400 truncate">Favorite</div>
               <div
-                class="absolute bottom-0 w-full bg-black/50 backdrop-blur-sm p-3"
+                class="flex gap-1 text-md font-bold text-yellow-200 items-center"
               >
-                <h3 class="text-base font-bold truncate"><%= novel.title %></h3>
-                <div class="flex justify-between items-center">
-                  <span class="text-pink-400 font-bold"
-                    ><%= novel.price %>฿</span
-                  >
-                </div>
+                <div><%= novel.price %></div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  class="text-yellow-200 w-4 h-4 sm:w-5 sm:h-5"
+                >
+                  <path
+                    d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
+                  />
+                </svg>
               </div>
             </div>
           </a>
           <% }) %>
         </div>
+        <% } %>
       </main>
     </div>
     <script src="/js/script.js"></script>
