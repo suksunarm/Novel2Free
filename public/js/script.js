@@ -100,6 +100,18 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  document.getElementById("navToggle").addEventListener("click", () => {
+    const rightMenu = document.getElementById("rightMenu");
+    const hamburgerIcon = document.getElementById("hamburgerIcon");
+    const closeIcon = document.getElementById("closeIcon");
+
+    rightMenu.classList.toggle("hidden");
+    rightMenu.classList.toggle("flex");
+    hamburgerIcon.classList.toggle("hidden");
+    closeIcon.classList.toggle("hidden");
+  });
+
+
   const searchForm = document.getElementById("searchForm");
   const searchInput = document.getElementById("searchInput");
 
@@ -520,7 +532,7 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error(err);
           }
         } else {
-          window.location.href = "/signin"
+          window.location.href = "/signin";
         }
       });
     });
