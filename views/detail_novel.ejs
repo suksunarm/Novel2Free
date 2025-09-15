@@ -41,18 +41,19 @@
             <button
               id="addToFavoriteBtn"
               data-id="<%= novel._id %>"
-              class="group rounded-full border border-white text-white w-fit p-2"
+              class="rounded-full border border-white text-white w-fit p-2"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"
                 viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
+                fill="<%= isFavorite ? 'red' : 'none' %>"
+                stroke="<%= isFavorite ? 'red' : 'currentColor' %>"
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
+                id="heartIcon"
                 class="lucide lucide-heart transition-colors duration-300 group-hover:fill-red-500 group-hover:stroke-red-500"
               >
                 <path

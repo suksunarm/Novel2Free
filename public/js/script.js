@@ -458,52 +458,46 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  const addToFavoriteBtn = document.getElementById("addToFavoriteBtn");
-
-  if (addToFavoriteBtn) {
-    addToFavoriteBtn.addEventListener("click", async () => {
-      const novelId = addToFavoriteBtn.dataset.id;
-      console.log(novelId);
-
+ const favBtn = document.getElementById("addToFavoriteBtn");
+  const heartIcon = document.getElementById("heartIcon");
+  if (favBtn && heartIcon) {
+    favBtn.addEventListener("click", async () => {
+      const novelId = favBtn.dataset.id;
+      const isRed = heartIcon.getAttribute("fill") === "red";
       try {
-        const res = await fetch(
-          `http://localhost:3000/add-novel-in-favorite/${novelId}`,
-          {
+        let res, data;
+        if (!isRed) {
+          res = await fetch(`/add-novel-in-favorite/${novelId}`, {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include", // ส่ง cookie JWT ไปด้วย
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
             body: JSON.stringify({ novelId }),
+          });
+          data = await res.json();
+          if (res.ok) {
+            heartIcon.setAttribute("fill", "red");
+            heartIcon.setAttribute("stroke", "red");
+            Swal.fire("เพิ่มเข้ารายการโปรดเรียบร้อย!", data.msg, "success");
+          } else {
+            Swal.fire("ผิดพลาด", data.msg, "error");
           }
-        );
-
-        const data = await res.json();
-
-        if (res.ok) {
-          Swal.fire({
-            icon: "success",
-            title: "เพิ่มเข้ารายการโปรดเรียบร้อย!",
-            text: data.msg,
-            confirmButtonText: "ตกลง",
-          }).then(() => {
-            window.location.href = "/";
-          });
         } else {
-          Swal.fire({
-            icon: "error",
-            title: "ผิดพลาด",
-            text: data.msg,
-            confirmButtonText: "ตกลง",
+          res = await fetch(`/remove-novel-from-favorite/${novelId}`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
           });
+          data = await res.json();
+          if (res.ok) {
+            heartIcon.setAttribute("fill", "none");
+            heartIcon.setAttribute("stroke", "currentColor");
+            Swal.fire("ลบออกจากรายการโปรดแล้ว!", data.msg, "success");
+          } else {
+            Swal.fire("ผิดพลาด", data.msg, "error");
+          }
         }
       } catch (err) {
-        Swal.fire({
-          icon: "error",
-          title: "เกิดข้อผิดพลาด",
-          text: err.msg,
-          confirmButtonText: "ตกลง",
-        });
+        Swal.fire("เกิดข้อผิดพลาด", err.message, "error");
       }
     });
   }
