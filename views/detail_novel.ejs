@@ -76,13 +76,15 @@
                 />
               </svg>
             </button>
-            <button
-              type="button"
-              data-id="<%= novel._id %>"
-              class="addToCartBtn bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-xl font-semibold transition text-white text-xl"
-            >
-              เพิ่มเข้าตะกร้า
-            </button>
+            <% if (!hasNovel) { %>
+              <button
+                type="button"
+                data-id="<%= novel._id %>"
+                class="addToCartBtn bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-xl font-semibold transition text-white text-xl"
+              >
+                เพิ่มเข้าตะกร้า
+              </button>
+            <% } %>
           </div>
         </div>
       </div>
