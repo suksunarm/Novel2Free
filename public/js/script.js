@@ -451,13 +451,14 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   //ตะกร้า
-  const addToCartBtn = document.getElementById("addToCartBtn");
+  const addToCartBtns = document.querySelectorAll(".addToCartBtn");
 
-  if (addToCartBtn) {
-    addToCartBtn.addEventListener("click", async () => {
-      const novelId = addToCartBtn.dataset.id;
-      console.log(novelId);
-
+  addToCartBtns.forEach(btn => {
+  btn.addEventListener("click", async () => {
+    const novelId = btn.dataset.id;
+    console.log(novelId);
+    
+    if (token) {
       try {
         const res = await fetch(
           `http://localhost:3000/add-novel-in-cart/${novelId}`,
@@ -494,57 +495,62 @@ document.addEventListener("DOMContentLoaded", () => {
         Swal.fire({
           icon: "error",
           title: "เกิดข้อผิดพลาด",
-          text: err.msg,
+          text: err.message || "เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ",
           confirmButtonText: "ตกลง",
         });
       }
-    });
-  }
+    } else {
+      window.location.href = "/signin";
+    }
+  });
+});
 
- const favBtn = document.getElementById("addToFavoriteBtn");
+  const favBtn = document.getElementById("addToFavoriteBtn");
   const heartIcon = document.getElementById("heartIcon");
   if (favBtn && heartIcon) {
     favBtn.addEventListener("click", async () => {
       const novelId = favBtn.dataset.id;
       const isRed = heartIcon.getAttribute("fill") === "red";
-      try {
-        let res, data;
-        if (!isRed) {
-          res = await fetch(`/add-novel-in-favorite/${novelId}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-            body: JSON.stringify({ novelId }),
-          });
-          data = await res.json();
-          if (res.ok) {
-            heartIcon.setAttribute("fill", "red");
-            heartIcon.setAttribute("stroke", "red");
-            Swal.fire("เพิ่มเข้ารายการโปรดเรียบร้อย!", data.msg, "success");
+      if (token) {
+        try {
+          let res, data;
+          if (!isRed) {
+            res = await fetch(`/add-novel-in-favorite/${novelId}`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              credentials: "include",
+              body: JSON.stringify({ novelId }),
+            });
+            data = await res.json();
+            if (res.ok) {
+              heartIcon.setAttribute("fill", "red");
+              heartIcon.setAttribute("stroke", "red");
+              Swal.fire("เพิ่มเข้ารายการโปรดเรียบร้อย!", data.msg, "success");
+            } else {
+              Swal.fire("ผิดพลาด", data.msg, "error");
+            }
           } else {
-            Swal.fire("ผิดพลาด", data.msg, "error");
+            res = await fetch(`/remove-novel-from-favorite/${novelId}`, {
+              method: "DELETE",
+              headers: { "Content-Type": "application/json" },
+              credentials: "include",
+            });
+            data = await res.json();
+            if (res.ok) {
+              heartIcon.setAttribute("fill", "none");
+              heartIcon.setAttribute("stroke", "currentColor");
+            } else {
+              Swal.fire("ผิดพลาด", data.msg, "error");
+            }
           }
-        } else {
-          res = await fetch(`/remove-novel-from-favorite/${novelId}`, {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-          });
-          data = await res.json();
-          if (res.ok) {
-            heartIcon.setAttribute("fill", "none");
-            heartIcon.setAttribute("stroke", "currentColor");
-
-          } else {
-            Swal.fire("ผิดพลาด", data.msg, "error");
-          }
+        } catch (err) {
+          Swal.fire("เกิดข้อผิดพลาด", err.message, "error");
         }
-      } catch (err) {
-        Swal.fire("เกิดข้อผิดพลาด", err.message, "error");
+      } else {
+        window.location.href = "/signin";
       }
     });
   }
-  
 
   const cartContainer = document.querySelector("#cart-container");
   const cartItems = document.querySelector("#cart_items");
@@ -630,14 +636,14 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
-window.addEventListener("pageshow", (event) => {
-  if (event.persisted) {
-    loadFavorites();
-}});
-  
+  window.addEventListener("pageshow", (event) => {
+    if (event.persisted) {
+      loadFavorites();
+    }
+  });
 });
 
-async function addPoint(point , price) {
+async function addPoint(point, price) {
   const phone = "0803371641";
   const priceFloat = parseFloat(price);
 
@@ -686,8 +692,8 @@ async function addPoint(point , price) {
             title: "เติมสำเร็จ!",
             text: `${addData.msg} +${point} Points`,
           }).then(() => {
-          window.location.href = '/';
-        });
+            window.location.href = "/";
+          });
         } else {
           Swal.fire({
             icon: "error",
@@ -729,7 +735,7 @@ async function loadFavorites() {
 
   const container = document.getElementById("favoritesContainer");
   container.innerHTML = "";
-  data.forEach(novel => {
+  data.forEach((novel) => {
     container.innerHTML += `
       <a href="/detail_novel/${novel._id}" 
          class="w-[200px] h-[260px] rounded-xl overflow-hidden shadow-lg bg-white/10 backdrop-blur-md transition transform hover:scale-105 hover:-translate-y-1 hover:shadow-2xl hover:shadow-pink-500/20">
@@ -745,4 +751,3 @@ async function loadFavorites() {
       </a>`;
   });
 }
-
