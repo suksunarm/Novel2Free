@@ -199,14 +199,32 @@ router.post("/create_user", async (req, res) => {
   }
 });
 
-router.get("/detail_novel/:id", authMiddleware, async (req, res) => {
+router.get("/detail_novel/:id", async (req, res) => {
+  let user;
+  let isFavorite = false;
+  let hasNovel = false;
+
+  const token = req.cookies.token
+  
+  if (token) {
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      user = await User.findById(decoded.id);
+    } catch (err) {
+      res.status(500).send("Failed to fetch novels and point: " + err.message);
+    }
+  }
+  console.log('from test',user)
+
   const novelId = req.params.id;
   const novel = await Novel.findById(novelId);
-  let isFavorite = false;
-  if (req.user && req.user.favorite) {
-    isFavorite = req.user.favorite.some(item => item.novel_id.toString() === novelId);
-  }
-  res.render("detail_novel", { pageTitle: novel.title, novel, isFavorite });
+
+  if (user) {
+    isFavorite = user.favorite.some(item => item.novel_id.toString() === novelId);
+    hasNovel = user.myNovel.some((item) => item.novel_id.toString() === novelId);
+  } 
+
+  res.render("detail_novel", { pageTitle: novel.title, novel, isFavorite, hasNovel });
 });
 
 // เพิ่มนิยายเข้าตะกร้า

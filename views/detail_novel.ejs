@@ -30,11 +30,26 @@
               <%= novel.title %>
             </h1>
             <p class="text-2xl text-gray-300 mt-2 flex items-center">
-              ราคา : 
+              ราคา :
               <span class="text-purple-400 font-semibold ml-1">
                 <%= novel.price %>
               </span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star-icon lucide-star text-yellow-500 ml-1"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg>     
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-star-icon lucide-star text-yellow-500 ml-1"
+              >
+                <path
+                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
+                />
+              </svg>
             </p>
           </div>
           <div class="flex justify-start items-center gap-2">
@@ -62,23 +77,77 @@
               </svg>
             </button>
             <button
-              id="addToCartBtn"
               type="button"
               data-id="<%= novel._id %>"
-              class="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-xl font-semibold transition text-white text-xl"
+              class="addToCartBtn bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-xl font-semibold transition text-white text-xl"
             >
               เพิ่มเข้าตะกร้า
             </button>
           </div>
         </div>
       </div>
-
       <!-- Novel Content -->
       <div
-        class="flex flex-col w-fit backdrop-blur-xl p-10 px-60 rounded-2xl shadow-lg leading-relaxed text-gray-200"
+        class="flex flex-col w-full backdrop-blur-2xl bg-black/40 border border-pink-500/30 p-12 px-80 rounded-3xl shadow-2xl shadow-purple-900/50 leading-relaxed text-white mx-auto"
       >
-        <h2 class="text-4xl font-semibold text-purple-400 mb-4">เนื้อหา</h2>
-        <p class="whitespace-pre-line px-10 text-xl"><%= novel.content %></p>
+        <h2
+          class="text-3xl font-bold bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent mb-5 text-center drop-shadow-lg"
+        >
+          เนื้อหา
+        </h2>
+        <div class="px-10 text-xl">
+          <% if (hasNovel) { %>
+          <!-- อ่านได้เต็ม -->
+          <div class="leading-10 text-gray-100 text-justify mb-8">
+            <%= novel.content %>
+          </div>
+
+          <% } else { %>
+          <!-- อ่านได้บางส่วน -->
+          <div class="leading-10 text-gray-100 text-justify mb-8">
+            <%= novel.content.substring(0, 400) +"..." %>
+          </div>
+
+          <div
+            class="flex flex-col items-center space-y-4 pt-6 border-t border-purple-500/20"
+          >
+            <div class="flex items-center space-x-2 text-purple-300">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fill-rule="evenodd"
+                  d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              <span class="text-lg font-medium"
+                >ซื้อเพื่อปลดล็อกเนื้อหาเต็ม</span
+              >
+            </div>
+            <button
+              type="button"
+              data-id="<%= novel._id %>"
+              class="addToCartBtn bg-gradient-to-r from-[#8164FF] to-[#CB52FF] hover:from-[#CB52FF] hover:to-[#8164FF] px-6 py-3 rounded-2xl font-semibold text-white text-lg shadow-lg hover:shadow-purple-500/50 transform hover:scale-105 transition-all duration-300"
+            >
+              <span class="flex items-center space-x-2">
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.6 8M7 13l-1.6-8m0 0h1.6M17 21a2 2 0 100-4 2 2 0 000 4zM9 21a2 2 0 100-4 2 2 0 000 4z"
+                  />
+                </svg>
+                <span>เพิ่มเข้าตะกร้า</span>
+              </span>
+            </button>
+          </div>
+          <% } %>
+        </div>
       </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
