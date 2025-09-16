@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
       loginModal.classList.add("hidden");
     });
   }
-  //function Signin
+
   const signInFunction = async (data) => {
     try {
       const response = await fetch("http://localhost:3000/login_user", {
@@ -26,6 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       if (response.ok) {
+        const result = await response.json();
         Swal.fire({
           icon: "success",
           title: "สำเร็จ",
@@ -34,9 +35,8 @@ document.addEventListener("DOMContentLoaded", () => {
           timerProgressBar: true,
           showConfirmButton: false,
         }).then(() => {
-          window.location.href = data.redirectPath;
+          window.location.href = result.redirectPath;
         });
-        const result = await response.json();
         sessionStorage.setItem("jwt", result.token);
         formSignin.reset();
       } else {
@@ -277,6 +277,58 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("เกิดข้อผิดพลาด ", err);
     }
   };
+
+  const getRedeemCodeFunction = async (data) => {
+    try {
+      const response = await fetch(
+        "http://localhost:3000/get-Redeem-Code",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+      const result = await response.json();
+      console.log("คำตอบนะ", result);
+
+      if (response.ok) {
+        const pointElement = document.getElementById("pointValue");
+        let currentPoints = parseInt(pointElement.innerText.replace(/\D/g, "")) || 0;
+        pointElement.innerText = `My Points : ${currentPoints + result.points}`;
+
+        Swal.fire({
+          icon: "success",
+          title: "สำเร็จ",
+          text: `${result.msg}`,
+        });
+        getRedeemCode.reset();
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "ผิดพลาด",
+          text: result.msg, // "คิดดี ๆ ให้มีสติ รอบคอบ"
+        });
+      }
+    } catch (err) {
+      console.error("เกิดข้อผิดพลาด ", err);
+    }
+  };
+
+  const getRedeemCode = document.getElementById("getRedeemCode");
+  if (getRedeemCode) {
+    getRedeemCode.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const Coupon = document.getElementById("coupon").value;
+      console.log(Coupon)
+
+      const redeemCode = {
+        Coupon,
+      };
+      getRedeemCodeFunction(redeemCode);
+    });
+  }
 
   const userIcon = document.getElementById("userIcon");
   const userDropdown = document.getElementById("userDropdown");

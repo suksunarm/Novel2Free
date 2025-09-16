@@ -4,6 +4,7 @@ const path = require("path");
 const bcrypt = require("bcrypt");
 const User = require("../model/user");
 const Novel = require("../model/novel");
+const Coupon = require("../model/coupon");
 const jwt = require("jsonwebtoken");
 const authMiddleware = require("../auth/auth");
 const generatePayload = require("promptpay-qr");
@@ -408,6 +409,28 @@ router.post("/cart/checkout", authMiddleware, async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ msg: "เกิดข้อผิดพลาด", error: err.message });
+  }
+});
+
+router.post("/get-Redeem-Code", authMiddleware, async (req, res) => {
+  try {
+    const { Coupon: couponCode } = req.body;
+    const coupon = await Coupon.findOne({ code: couponCode });
+    const user = req.user
+
+    if (!coupon) {
+      return res.status(404).json({ msg: "ไม่พบคูปอง" });
+    }
+
+    user.points += coupon.points;
+    await user.save();
+
+    res.status(200).json({
+      msg: "ใช้คูปองสำเร็จ",
+      points: coupon.points,
+    })
+  } catch (err) {
+    res.status(500).json({ msg: "Get Coupon Failed", error: err.message });
   }
 });
 
