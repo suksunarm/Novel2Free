@@ -2,7 +2,62 @@ document.addEventListener("DOMContentLoaded", () => {
   const loginModal = document.getElementById("loginModal");
   const closeBtn = document.getElementById("closeLoginModal");
   const signinBtn = document.getElementById("signinBtn");
+  const chatForm = document.getElementById("chatForm");
+  const userInput = document.getElementById("userInput");
+  const chatWindow = document.getElementById("chatWindow");
 
+  function addMessage(message, from = "user") {
+    const div = document.createElement("div");
+    div.classList.add(
+      "flex",
+      from === "user" ? "justify-end" : "justify-start"
+    );
+
+    const bubble = document.createElement("div");
+    bubble.classList.add("px-4", "py-2", "rounded-[12px]", "max-w-[80%]");
+
+    if (from === "user") {
+      bubble.classList.add("bg-[#CB52FF]", "text-white");
+    } else {
+      bubble.classList.add("bg-[#8164FF]", "text-white");
+    }
+
+    bubble.innerText = message;
+    div.appendChild(bubble);
+    chatWindow.appendChild(div);
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+
+    return div;
+  }
+
+  // เมื่อกดส่งข้อความ
+  if (chatForm) {
+    chatForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const message = userInput.value.trim();
+      if (!message) return;
+
+      // แสดงข้อความผู้ใช้
+      addMessage(message, "user");
+      userInput.value = "";
+
+      const loadingDiv = addMessage("กำลังพิมพ์...", "bot");
+
+      // เรียก API backend ที่คุณจะเชื่อม Gemini (หรือ Ollama/Orama)
+      try {
+        const res = await fetch("http://localhost:3000/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ question: message }),
+        });
+        const data = await res.json();
+        const answer = data.result.response.candidates[0].content.parts[0].text;
+        loadingDiv.lastChild.innerText = answer;
+      } catch (err) {
+        loadingDiv.lastChild.innerText = "⚠️ เกิดข้อผิดพลาด กรุณาลองใหม่";
+      }
+    });
+  }
   if (signinBtn) {
     signinBtn.addEventListener("click", () => {
       loginModal.classList.remove("hidden");
@@ -14,7 +69,8 @@ document.addEventListener("DOMContentLoaded", () => {
       loginModal.classList.add("hidden");
     });
   }
-
+  //Signin
+  const formSignin = document.getElementById("Signin");
   const signInFunction = async (data) => {
     try {
       const response = await fetch("http://localhost:3000/login_user", {
@@ -83,8 +139,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  //Signin
-  const formSignin = document.getElementById("Signin");
   if (formSignin) {
     formSignin.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -264,12 +318,12 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         addRedeemCode.reset();
         const data = await response.json();
-        console.log(data.copon);
+        console.log(data.coupon);
       } else {
         const data = await response.json();
         Swal.fire({
-          icon: "success",
-          title: "สำเร็จ",
+          icon: "error",
+          title: "เกิดข้อผิดพลาด",
           text: `${data.msg}`,
         });
       }
@@ -280,22 +334,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const getRedeemCodeFunction = async (data) => {
     try {
-      const response = await fetch(
-        "http://localhost:3000/get-Redeem-Code",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
+      const response = await fetch("http://localhost:3000/get-Redeem-Code", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
       const result = await response.json();
       console.log("คำตอบนะ", result);
 
       if (response.ok) {
         const pointElement = document.getElementById("pointValue");
-        let currentPoints = parseInt(pointElement.innerText.replace(/\D/g, "")) || 0;
+        let currentPoints =
+          parseInt(pointElement.innerText.replace(/\D/g, "")) || 0;
         pointElement.innerText = `My Points : ${currentPoints + result.points}`;
 
         Swal.fire({
@@ -321,7 +373,7 @@ document.addEventListener("DOMContentLoaded", () => {
     getRedeemCode.addEventListener("submit", (e) => {
       e.preventDefault();
       const Coupon = document.getElementById("coupon").value;
-      console.log(Coupon)
+      console.log(Coupon);
 
       const redeemCode = {
         Coupon,
@@ -356,7 +408,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const token = sessionStorage.getItem("jwt");
   const logoutAdmin = document.getElementById("logoutAdmin");
 
-  if (signinBtn && userIcon) {
+  if (signinBtn && userIcon && logoutBtn) {
     if (token) {
       signinBtn.classList.add("hidden");
       userIcon.classList.remove("hidden");
@@ -448,8 +500,8 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         const data = await response.json();
         Swal.fire({
-          icon: "success",
-          title: "สำเร็จ",
+          icon: "error",
+          title: "เกิดข้อผิดพลาด",
           text: `${data.msg}`,
         });
       }
@@ -493,8 +545,8 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         const data = await response.json();
         Swal.fire({
-          icon: "success",
-          title: "สำเร็จ",
+          icon: "error",
+          title: "เกิดข้อผิดพลาด",
           text: `${data.msg}`,
         });
       }
@@ -534,10 +586,12 @@ document.addEventListener("DOMContentLoaded", () => {
               `http://localhost:3000/add-novel-in-cart/${novelId}`,
               {
                 method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${token}`,
-                },
+                headers: token
+                  ? {
+                      "Content-Type": "application/json",
+                      Authorization: `Bearer ${token}`,
+                    }
+                  : { "Content-Type": "application/json" },
                 credentials: "include", // ส่ง cookie JWT ไปด้วย
                 body: JSON.stringify({ novelId }),
               }
@@ -713,11 +767,13 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
-  window.addEventListener("pageshow", (event) => {
-    if (event.persisted) {
-      loadFavorites();
-    }
-  });
+  if (container && Array.isArray(data)) {
+    window.addEventListener("pageshow", (event) => {
+      if (event.persisted) {
+        loadFavorites();
+      }
+    });
+  }
 });
 
 async function addPoint(point, price) {
@@ -811,20 +867,21 @@ async function loadFavorites() {
   const data = await res.json();
 
   const container = document.getElementById("favoritesContainer");
-  container.innerHTML = "";
-  data.forEach((novel) => {
-    container.innerHTML += `
-      <a href="/detail_novel/${novel._id}" 
-         class="w-[200px] h-[260px] rounded-xl overflow-hidden shadow-lg bg-white/10 backdrop-blur-md transition transform hover:scale-105 hover:-translate-y-1 hover:shadow-2xl hover:shadow-pink-500/20">
-        <div class="relative w-full h-full">
-          <img src="${novel.image_url}" alt="Novel Cover" class="w-full h-full object-cover" />
-          <div class="absolute bottom-0 w-full bg-black/50 backdrop-blur-sm p-3">
-            <h3 class="text-base font-bold truncate">${novel.title}</h3>
-            <div class="flex justify-between items-center">
-              <span class="text-pink-400 font-bold">${novel.price}฿</span>
+  if (container) {
+    data.forEach((novel) => {
+      container.innerHTML += `
+        <a href="/detail_novel/${novel._id}" 
+          class="w-[200px] h-[260px] rounded-xl overflow-hidden shadow-lg bg-white/10 backdrop-blur-md transition transform hover:scale-105 hover:-translate-y-1 hover:shadow-2xl hover:shadow-pink-500/20">
+          <div class="relative w-full h-full">
+            <img src="${novel.image_url}" alt="Novel Cover" class="w-full h-full object-cover" />
+            <div class="absolute bottom-0 w-full bg-black/50 backdrop-blur-sm p-3">
+              <h3 class="text-base font-bold truncate">${novel.title}</h3>
+              <div class="flex justify-between items-center">
+                <span class="text-pink-400 font-bold">${novel.price}฿</span>
+              </div>
             </div>
           </div>
-        </div>
-      </a>`;
-  });
+        </a>`;
+    });
+  }
 }

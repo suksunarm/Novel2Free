@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <title><%= pageTitle %></title>
+</head>
+<body>
+  <div class="flex bg-[url('/assets/bg.png')] min-h-screen bg-center bg-cover justify-center items-center px-4">
+    <!-- Chat Container -->
+    <div class="bg-[#5D4F71] flex flex-col w-full max-w-[600px] h-[80vh] rounded-[20px] p-5 text-white shadow-lg">
+      <!-- Header -->
+      <div class="text-center font-bold text-[24px] mb-4">💬 Chatbot AI</div>
+
+      <!-- Chat Window -->
+      <div id="chatWindow" class="flex-1 overflow-y-auto bg-[#3D324D] rounded-[12px] p-4 space-y-3">
+        <!-- ตัวอย่างข้อความเริ่มต้น -->
+        <div class="flex justify-start">
+          <div class="bg-[#8164FF] text-white px-4 py-2 rounded-[12px] max-w-[80%]">
+            สวัสดีค่ะ! มีอะไรให้ช่วยเรื่อง point หรือเติมเงินบ้างคะ?
+          </div>
+        </div>
+      </div>
+
+      <!-- Input Box -->
+      <form id="chatForm" class="mt-4 flex">
+        <input
+          id="userInput"
+          type="text"
+          placeholder="พิมพ์คำถามของคุณ..."
+          class="flex-1 rounded-l-[12px] px-4 py-2 text-black focus:outline-none bg-white"
+          required
+        />
+        <button
+          type="submit"
+          class="bg-gradient-to-r from-[#8164FF] to-[#CB52FF] px-5 py-2 rounded-r-[12px] font-bold"
+        >
+          ส่ง
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="/js/script.js"></script>
+</body>
+</html>

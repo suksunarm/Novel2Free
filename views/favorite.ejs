@@ -38,6 +38,7 @@
         <div class="text-white text-xl ml-10">ยังไม่มีรายการโปรด</div>
         <% } else { %>
         <div
+          id="favoritesContainer"
           class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6 px-0 sm:px-20"
         >
           <% favoriteItems.forEach(novel => { %>
